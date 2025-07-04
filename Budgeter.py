@@ -1,6 +1,39 @@
 
 # Budgeter
 
+#------IMPORTS------------
+
+from flask import Flask, render_template, url_for, request, redirect
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+#-------------------------
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///budget.db"
+db = SQLAlchemy(app)
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False)
+    income = db.Column(db.Integer, default=0)
+    spending = db.Column(db.Integer, default=0)
+    goal = db.Column(db.Integer, default=0)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Task {self.id}>'
+    
+
+
+
+@app.route('/', methods=['POST','GET'])
+def index():
+    return render_template('calendar.html')
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 class Person: #User class
     def __init__(self, username, income, spending, goal):
         self._username = username.lower()
@@ -75,13 +108,13 @@ def findAccount(user):
             
 
 
-Mat = Person("Mat",1000,500,"40%")
+#Mat = Person("Mat",1000,500,"40%")
 #Mat.set_income(int(input("Set a income")))
-writeAccount(Mat)
+#writeAccount(Mat)
 
-print (Mat.goal())
-print (Mat)
+#print (Mat.goal())
+#print (Mat)
 
-Sal = Person("sally",200,100,"30%")
-findAccount(Sal)
+#Sal = Person("sally",200,100,"30%")
+#findAccount(Sal)
 

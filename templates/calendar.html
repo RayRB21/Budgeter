@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<Title>Calendar</Title>
+{% endblock %}
+
+{% block body %}
+<div class="content"></div>
+    <h1>calendar</h1>
+
+    <table>
+        <tr class="table-headings">
+            <th><a href="">User</a></th>
+            <th>Mon</th>
+            <th>Tues</th>
+            <th>Wed</th>
+            <th>Thur</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        <tr class="table-contents">
+            <td>Week 1</td>
+            <td>
+                <form action='/' method='POST'>
+                    <input type="text" name="content" id="content"> 
+                    <input type="submit" value="Add Task">
+                </form>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="table-contents">
+            <td>Week 2</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="table-contents">
+            <td>Week 3</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="table-contents">
+            <td>Week 4</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+{% endblock %}
