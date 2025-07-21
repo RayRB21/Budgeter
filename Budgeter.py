@@ -29,7 +29,32 @@ class Users(db.Model):
 
 @app.route('/', methods=['POST','GET'])
 def index():
-    return render_template('calendar.html')
+    if request.method == 'POST':
+        calendar_content = request.form['content']
+        test = Users(username=calendar_content)
+
+        try:
+            db.session.add(test)
+            db.session.commit()
+            return redirect('/')
+    
+        except:
+            return 'There was an issue with the test'
+        
+    else:
+        usernames = Users.query.order_by(Users.date_created).all()
+        return render_template('calendar.html', usernames = usernames)
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    username_to_delete = Users.query.get_or_404(id)
+
+    try:
+        db.session.delete(username_to_delete)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return "There was a failure to delete"    
 
 if __name__ == "__main__":
     app.run(debug=True)

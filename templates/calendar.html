@@ -36,7 +36,11 @@
         </tr>
         <tr class="table-contents">
             <td>Week 2</td>
-            <td></td>
+            <td>{% for username in usernames %}
+                {{username.username}}
+                <a href ="/delete/{{username.id}}">Delete</a>
+                {% endfor %}
+            </td>
             <td></td>
             <td></td>
             <td></td>
