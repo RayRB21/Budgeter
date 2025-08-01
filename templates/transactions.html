@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title></title>
+{% endblock %}
+
+{% block body %}
+<form action='/transactions' method='POST'>
+    <input type="text" name="income" id="income" value="Current income is {{user_info.income}}">
+    <input type="submit" value="Update Income">
+</form>
+{% endblock %}

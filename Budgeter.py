@@ -54,6 +54,21 @@ def info():
 
     return render_template('information.html',user_info = user_info)
 
+@app.route('/transactions', methods=['POST','GET'])
+def transactions():
+    user_info = Users.query.get_or_404(1)
+
+    if request.method == 'POST':
+        user_info.income = str(int(request.form['income']) + int(user_info.income))
+
+        try:
+            db.session.commit()
+            return redirect('/transactions')
+        except:
+            return 'There was an issue with updating your income '
+    else:
+        return render_template('transactions.html',user_info = user_info)
+
 @app.route('/delete/<int:id>')
 def delete(id):
     username_to_delete = Users.query.get_or_404(id)
