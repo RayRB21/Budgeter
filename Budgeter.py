@@ -26,7 +26,6 @@ class Users(db.Model):
     
 
 
-
 @app.route('/', methods=['POST','GET'])
 def index():
     if request.method == 'POST':
@@ -45,6 +44,16 @@ def index():
         usernames = Users.query.order_by(Users.date_created).all()
         return render_template('calendar.html', usernames = usernames)
 
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/information')
+def info():
+    user_info = Users.query.get_or_404(1)
+
+    return render_template('information.html',user_info = user_info)
+
 @app.route('/delete/<int:id>')
 def delete(id):
     username_to_delete = Users.query.get_or_404(id)
@@ -59,7 +68,7 @@ def delete(id):
 if __name__ == "__main__":
     app.run(debug=True)
 
-class Person: #User class
+'''class Person: #User class
     def __init__(self, username, income, spending, goal):
         self._username = username.lower()
         self._income = income
@@ -143,3 +152,4 @@ def findAccount(user):
 #Sal = Person("sally",200,100,"30%")
 #findAccount(Sal)
 
+'''

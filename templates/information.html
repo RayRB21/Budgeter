@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Information</title>
+{% endblock %}
+
+{% block body %}
+<div class = "Info">
+    <h1>Hello</h1>
+    <h3>User = {{user_info.username}}</h3>
+    <h4>Income = {{user_info.income}}</h4>
+    <h4>Spending = {{user_info.spending}}</h4>
+    <h4>Goal = {{user_info.goal}}</h4>
+</div>
+{% endblock %}
