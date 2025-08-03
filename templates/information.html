@@ -7,9 +7,9 @@
 {% block body %}
 <div class = "Info">
     <h1>Hello</h1>
-    <h3>User = {{user_info.username}}</h3>
-    <h4>Income = {{user_info.income}}</h4>
-    <h4>Spending = {{user_info.spending}}</h4>
-    <h4>Goal = {{user_info.goal}}</h4>
+    <h3>User = {{session["user"]}}</h3>
+    <h4>Income = {{session["income"]}}</h4>
+    <h4>Spending = {{session["spending"]}}</h4>
+    <h4>Goal = {{session["goal"]}}</h4>
 </div>
 {% endblock %}

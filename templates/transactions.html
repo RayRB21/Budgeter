@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block body %}
+<p>Current income is £{{session["income"]}}</p>
 <form action='/transactions' method='POST'>
-    <input type="text" name="income" id="income" value="Current income is {{user_info.income}}">
-    <input type="submit" value="Update Income">
+    <input type="text" name="income" id="income">
+    <input type="submit" value="Add Income">
 </form>
 {% endblock %}
