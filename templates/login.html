@@ -5,8 +5,20 @@
 {% endblock %}
 
 {% block body %}
+<!--
 <form action='#' method='POST'>
     <input type="text" name="username" id="username"> 
-    <input type="submit" value="login">
+    <button type="submit" class="btn btn-primary">Login</button>
 </form>
+-->
+
+<form action = '#' method = 'POST'>
+  <div class="mb-3">
+    <label for="username" class="form-label"><h3>Username</h3></label>
+    <input type="text" class="form-control form-control-lg centered-box" name="username" id="username">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
 {% endblock %} 

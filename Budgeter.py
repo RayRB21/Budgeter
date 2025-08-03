@@ -3,7 +3,7 @@
 
 #------IMPORTS------------
 
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -44,7 +44,6 @@ def login():
         userContent = request.form["username"].lower()
         curUser = Users.query.filter_by(username=userContent).first()
         if curUser:
-            #user_info = Users.query.get_or_404(curUser)
             session["id"] = curUser.id
             session["user"] = curUser.username
             session["income"] = curUser.income
@@ -52,6 +51,7 @@ def login():
             session["goal"] = curUser.goal
             session["date_created"] = curUser.date_created
             return redirect(url_for("menu")) 
+        flash("Username not found, please try again", "error")
         return redirect(url_for("login"))
     else:
         return render_template("login.html")
@@ -62,6 +62,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop("user",None)
+    flash("You have logged out", "info")
     return redirect(url_for("login"))
 
 
