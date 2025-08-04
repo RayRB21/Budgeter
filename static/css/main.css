@@ -1,6 +1,6 @@
-:root {
+/*:root {
 }
-
+*/
 
 body {
     text-align: center;
@@ -35,4 +35,13 @@ table{
   --bs-btn-active-color: var(--bs-btn-hover-color);
   --bs-btn-active-bg: #{shade-color($bd-violet, 20%)};
   --bs-btn-active-border-color: #{shade-color($bd-violet, 20%)};
+}
+
+.login-form {
+    margin-top: 150px;
+}
+
+#user-login-box {
+    width: 50%;
+    margin: 0 auto;
 }
