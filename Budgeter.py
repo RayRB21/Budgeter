@@ -30,10 +30,10 @@ class Users(db.Model):
 
 @app.route('/')
 def menu():
-    if "user" in session:
-        return render_template('menu.html')
-    else:
+    if "user" not in session:
         return redirect(url_for("login"))
+    else:
+        return render_template('menu.html')
 
 
 
@@ -61,6 +61,8 @@ def login():
 
 @app.route('/logout')
 def logout():
+    if "user" not in session:
+        return redirect(url_for("login"))
     session.pop("user",None)
     flash("You have logged out", "info")
     return redirect(url_for("login"))

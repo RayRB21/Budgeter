@@ -6,6 +6,8 @@ body {
     text-align: center;
     margin: 0;
     font-family: sans-serif;
+    background-color: #d3d3d3a1;
+    min-height: 100vh;
 }
 
 table,tr,th,td {
@@ -39,6 +41,15 @@ table{
 
 .login-form {
     margin-top: 150px;
+}
+
+.purple-color{
+    background: linear-gradient(to bottom,#0300bd,#7308ca) !important;
+}
+
+.navi-menu-text{
+    color: #b6b5bb;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #user-login-box {
