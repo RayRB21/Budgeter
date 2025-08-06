@@ -50,7 +50,7 @@ def login():
             session["spending"] = curUser.spending
             session["goal"] = curUser.goal
             session["date_created"] = curUser.date_created
-            return redirect(url_for("menu")) 
+            return redirect(url_for("info")) 
         flash("Username not found, please try again", "error")
         return redirect(url_for("login"))
     else:
