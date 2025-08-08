@@ -5,6 +5,7 @@
 
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 from flask_sqlalchemy import SQLAlchemy
+import calendar as Calendar
 from datetime import datetime
 import re
 
@@ -35,6 +36,23 @@ def is_money_format(s):
 
 
 
+@app.route('/caltest')
+def caltest():
+    # Get selected month/year from query parameters, default to current
+    year = request.args.get('year', default=datetime.now().year, type=int)
+    month = request.args.get('month', default=datetime.now().month, type=int)
+
+    # Calendar data
+    cal = Calendar.monthcalendar(year, month)
+    month_name = Calendar.month_name[month]
+
+    # Generate year range and month list for the dropdown
+    years = list(range(2020, 2031))
+    months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
+
+    return render_template('caltest.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years)
+
+
 @app.route('/')
 def menu():
     if "user" not in session:
@@ -57,7 +75,7 @@ def login():
             session["spending"] = curUser.spending
             session["goal"] = curUser.goal
             session["date_created"] = curUser.date_created
-            return redirect(url_for("info")) 
+            return redirect(url_for("info"))
         flash("Username not found, please try again", "error")
         return redirect(url_for("login"))
     else:
@@ -134,7 +152,7 @@ def transactions():
 def signup():
     if request.method == "POST":
         signUpError = False
-        curUsername = request.form['username']
+        curUsername = request.form['username'].lower()
         curPassword = request.form['password']
         curIncome = request.form['income']
         curGoal = request.form['goal']

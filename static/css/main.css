@@ -5,7 +5,7 @@
 body {
     text-align: center;
     margin: 0;
-    font-family: sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     /*background-color: #d3d3d3a1;*/
     background-color: #7C89FF;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%230dcca2' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%230b67aa' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%230fc597' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%230f60a3' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%2312be8d' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%2312589d' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%2315b883' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%23165196' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%2318b178' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%23184a8f' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%231baa6e' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%231b4388' points='943 900 1210 900 971 687'/%3E%3C/svg%3E");
@@ -23,10 +23,15 @@ table,tr,th,td {
 
 table{
     width: 100%;
-}
+    border-collapse: separate; /* Important: allows rounded corners */
+    border-spacing: 0;         /* Removes extra space */
+    border-radius: 10px;       /* Rounds the table corners */
+    overflow: hidden;      
+    }
 
 .table-contents{
     height: 60px;
+    
 }
 
 
@@ -48,7 +53,16 @@ table{
     float: right;
 }
 
+.not-avail{
+    background-color: #9a9a9c !important;
+}
+
 #user-login-box {
     width: 500px;
     margin: 0 auto;
+}
+
+
+.nunito{
+    font-family: 'Nunito', sans-serif;
 }
