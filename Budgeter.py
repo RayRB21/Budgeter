@@ -6,6 +6,7 @@
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import re
 
 #-------------------------
 
@@ -21,10 +22,16 @@ class Users(db.Model):
     spending = db.Column(db.Integer, default=0)
     goal = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    password = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
         return f'<Task {self.id}>'
     
+
+
+def is_money_format(s):
+    pattern = r"^-?\d+(\.\d{1,2})?$"
+    return bool(re.match(pattern, s))
 
 
 
@@ -43,7 +50,7 @@ def login():
     if request.method == 'POST':
         userContent = request.form["username"].lower()
         curUser = Users.query.filter_by(username=userContent).first()
-        if curUser:
+        if curUser and request.form["password"] == curUser.password:
             session["id"] = curUser.id
             session["user"] = curUser.username
             session["income"] = curUser.income
@@ -122,6 +129,48 @@ def transactions():
 
 
 
+
+@app.route('/signup',methods=["POST","GET"])
+def signup():
+    if request.method == "POST":
+        signUpError = False
+        curUsername = request.form['username']
+        curPassword = request.form['password']
+        curIncome = request.form['income']
+        curGoal = request.form['goal']
+        if not curUsername or not curUsername.isalnum() or len(curUsername) > 20:
+            flash("Username must be alphanumeric and less than 20 characters!", "error")
+            signUpError = True
+        if Users.query.filter_by(username=curUsername).first():
+            flash("Username is already taken try a different Username", "error")
+            signUpError = True
+        if not curPassword or not isinstance(curPassword,str) or len(curPassword) > 20:
+            flash("Password must be a string of characters that is less than 20 characters!", "error")
+            signUpError = True
+        if not is_money_format(curIncome):
+            flash("Income must be a valid currency input!", "error")
+            signUpError = True
+        if not is_money_format(curGoal):
+            flash("Goal must be a valid currency input!", "error")
+            signUpError = True
+        if signUpError:
+            return redirect(url_for("signup"))
+        newUser = Users(username = curUsername, password=curPassword, income= curIncome, goal= curGoal)
+
+        try:
+            db.session.add(newUser)
+            db.session.commit()
+            flash("Account successfully created!","info")
+            return redirect(url_for('login'))
+        except:
+            flash("There was an issue creating your account please try again","warning")
+            return redirect(url_for('signup'))
+        
+    else:
+        return render_template('signup.html')
+
+
+
 @app.route('/delete/<int:id>')
 def delete(id):
     username_to_delete = Users.query.get_or_404(id)
@@ -135,4 +184,3 @@ def delete(id):
 
 if __name__ == "__main__":
     app.run(debug=True)
-

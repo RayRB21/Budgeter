@@ -18,10 +18,12 @@
 
 <form action = '#' method = 'POST' class="login-form">
   <div class="mb-3">
-    <label for="username" class="form-label"><h3>Username</h3></label>
-    <input type="text" id = "user-login-box" class="form-control form-control-lg" name="username" id="username">
+    <input type="text" id = "user-login-box" placeholder="Username" class="form-control" name="username" id="username">
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <div class="mb-3">
+    <input type="password" class="form-control" style="width:500px; margin: 0 auto" id="password" name ="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-info">Login</button>
 </form>
 
 

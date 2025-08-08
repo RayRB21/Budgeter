@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Create Account</title>
+{% endblock %}
+
+{% block body %}
+<form class="input-group mb-3" action = '#' method = 'POST'>
+  <input type="text" class="form-control" placeholder="Username" aria-label="Username" name="username" aria-describedby="basic-addon1">
+  <input type="text" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" name="password">
+  <input type="text" class="form-control" placeholder="Income" aria-label="Income" aria-describedby="basic-addon1" name="income">
+  <input type="text" class="form-control" placeholder="Goal" aria-label="Goal" aria-describedby="basic-addon1" name="goal">
+  <button type="submit">submit</button>
+</form>
+
+{% endblock %}
