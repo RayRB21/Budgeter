@@ -5,6 +5,8 @@
 
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.types import JSON
+from flask_migrate import Migrate
 import calendar as Calendar
 from datetime import datetime
 import re
@@ -12,8 +14,9 @@ import re
 #-------------------------
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///budget.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///budget.db"   
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 app.secret_key = "test"
 
 class Users(db.Model):
@@ -24,6 +27,7 @@ class Users(db.Model):
     goal = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     password = db.Column(db.String(20), nullable=False)
+    events = db.Column(JSON)
 
     def __repr__(self):
         return f'<Task {self.id}>'
@@ -36,26 +40,13 @@ def is_money_format(s):
 
 
 
-@app.route('/caltest')
-def caltest():
-    # Get selected month/year from query parameters, default to current
-    year = request.args.get('year', default=datetime.now().year, type=int)
-    month = request.args.get('month', default=datetime.now().month, type=int)
 
-    # Calendar data
-    cal = Calendar.monthcalendar(year, month)
-    month_name = Calendar.month_name[month]
-
-    # Generate year range and month list for the dropdown
-    years = list(range(2020, 2031))
-    months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
-
-    return render_template('caltest.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years)
 
 
 @app.route('/')
 def menu():
     if "user" not in session:
+        flash("Please login or sign up","info")
         return redirect(url_for("login"))
     else:
         return render_template('menu.html')
@@ -75,8 +66,9 @@ def login():
             session["spending"] = curUser.spending
             session["goal"] = curUser.goal
             session["date_created"] = curUser.date_created
+            session["events"] = curUser.events
             return redirect(url_for("info"))
-        flash("Username not found, please try again", "error")
+        flash("Login failed, please try again", "error")
         return redirect(url_for("login"))
     else:
         return render_template("login.html")
@@ -87,40 +79,62 @@ def login():
 @app.route('/logout')
 def logout():
     if "user" not in session:
+        flash("Please login or sign up","info")
         return redirect(url_for("login"))
-    session.pop("user",None)
+    session.clear()
     flash("You have logged out", "info")
     return redirect(url_for("login"))
 
 
-
-
-@app.route('/calendar', methods=['POST','GET'])
+@app.route('/calendar')
 def calendar():
     if "user" not in session:
+        flash("Please login or sign up","info")
         return redirect(url_for("login"))
-    if request.method == 'POST':
-        calendar_content = request.form['content']
-        test = Users(username=calendar_content)
-
-        try:
-            db.session.add(test)
-            db.session.commit()
-            return redirect('/')
     
-        except:
-            return 'There was an issue with the test'
-        
-    else:
-        usernames = Users.query.order_by(Users.date_created).all()
-        return render_template('calendar.html', usernames = usernames)
+    year = request.args.get('year', default=datetime.now().year, type=int)
+    month = request.args.get('month', default=datetime.now().month, type=int)
 
+    cal = Calendar.monthcalendar(year, month)
+    month_name = Calendar.month_name[month]
+
+    years = list(range(2020, 2031))
+    months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
+
+    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,show_modal=False)
+
+
+
+@app.route('/calendar/add-event/<cell_id>')
+def addEvent(cell_id):
+    if "user" not in session:
+        flash("Please login or sign up","info")
+        return redirect(url_for("login"))
+    
+    cell_values = cell_id.split("-")
+    year = int(cell_values[2])
+    month = int(cell_values[1])
+
+    cal = Calendar.monthcalendar(year, month)
+    month_name = Calendar.month_name[month]
+
+    years = list(range(2020, 2031))
+    months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
+    if cell_id in session["events"]:
+        modal_events = session["events"][cell_id]
+    else:
+        modal_events = ""
+    modal_title = cell_id
+    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,modal_events=modal_events,modal_title=modal_title,show_modal=True)
+
+    
 
 
 
 @app.route('/information')
 def info():
     if "user" not in session:
+        flash("Please login or sign up","info")
         return redirect(url_for("login"))
 
     return render_template('information.html')
@@ -130,6 +144,9 @@ def info():
 
 @app.route('/transactions', methods=['POST','GET'])
 def transactions():
+    if "user" not in session:
+        flash("Please login or sign up","info")
+        return redirect(url_for("login"))
     user_info = Users.query.get_or_404(session["id"])
 
     if request.method == 'POST':
@@ -199,6 +216,31 @@ def delete(id):
         return redirect('/')
     except:
         return "There was a failure to delete"    
+
+
+
+@app.route('/oldCal', methods=['POST','GET'])
+def oldCal():
+    if "user" not in session:
+        flash("Please login or sign up","info")
+        return redirect(url_for("login"))
+    if request.method == 'POST':
+        calendar_content = request.form['content']
+        test = Users(username=calendar_content)
+
+        try:
+            db.session.add(test)
+            db.session.commit()
+            return redirect('/')
+    
+        except:
+            return 'There was an issue with the test'
+        
+    else:
+        usernames = Users.query.order_by(Users.date_created).all()
+        return render_template('oldCal.html', usernames = usernames)
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True)
