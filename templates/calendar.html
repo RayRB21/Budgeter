@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>testcal</title>
+<title>Calendar</title>
 {% endblock %}
 
 {% block body %}
@@ -33,32 +33,35 @@
 
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#event_modal">
   Launch demo modal
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="event_modal" tabindex="-1" aria-labelledby="event_modal_label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">{{modal_title}}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="event_modal_label">{{modal_title}}</h1>
       </div>
       <div class="modal-body">
-        {{modal_events}}
+        {% for event in modal_events %}
+        {{event[0]}}
+        {% endfor %}
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      <form class="modal-footer" method="GET" action="/calendar">
+        <input type="hidden" name="month" value="{{month}}">
+        <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Cancel</button>
+        <input type="hidden" name="month" value="{{month}}">
+        <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Save changes</button>
+      </form>
     </div>
   </div>
 </div>
 
 {% if show_modal %}
 <script>
-  var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+  var myModal = new bootstrap.Modal(document.getElementById('event_modal'));
   myModal.show();
 </script>
 {% endif %}
@@ -89,11 +92,17 @@
               </div>
                   <div align ="right">
                     <a type="button" class="btn btn-warning"  href="{{ url_for('addEvent', cell_id=cell_id) }}">
-                    {{cell_id}} <!--REPLACE WITH "ADD EVENT" WHEN NOT DEBUGGING-->
+                    + <!--REPLACE WITH "{{cell_id}}" WHEN DEBUGGING-->
                     </a>
                   </div>
                   {% for event in session["events"][cell_id] %}
-                  <button type="button" class=" btn btn-warning">{{ event[0] ~ " " ~ event[1] ~ " " ~ event[2] }} </button>
+                  <button type="button" class="btn {% if event[1] == 'work' %} btn-primary 
+                  {% elif event[1] == 'leisure' %} btn-danger 
+                  {% elif event[1] == 'bills' %} btn-dark 
+                  {% else %} btn-warning {% endif %}">
+                  {{ event[0] }} 
+                  </button>
+                  <br>
                   {% endfor %}
                 {% endif %}
 

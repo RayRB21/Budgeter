@@ -54,7 +54,7 @@ def menu():
 
 
 
-@app.route('/login', methods = ["POST","GET"])
+@app.route('/login/', methods = ["POST","GET"])
 def login():
     if request.method == 'POST':
         userContent = request.form["username"].lower()
@@ -76,7 +76,7 @@ def login():
 
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -86,14 +86,16 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route('/calendar')
-def calendar():
+@app.route('/calendar/', defaults={'cur_year': None, 'cur_month': None})
+@app.route('/calendar/<cur_year>/<cur_month>')
+def calendar(cur_year,cur_month):
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
-    
-    year = request.args.get('year', default=datetime.now().year, type=int)
-    month = request.args.get('month', default=datetime.now().month, type=int)
+
+    else:
+        year = request.args.get('year', default=datetime.now().year, type=int)
+        month = request.args.get('month', default=datetime.now().month, type=int)
 
     cal = Calendar.monthcalendar(year, month)
     month_name = Calendar.month_name[month]
@@ -105,7 +107,7 @@ def calendar():
 
 
 
-@app.route('/calendar/add-event/<cell_id>')
+@app.route('/calendar/add-event/<cell_id>/')
 def addEvent(cell_id):
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -125,13 +127,16 @@ def addEvent(cell_id):
     else:
         modal_events = ""
     modal_title = cell_id
-    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,modal_events=modal_events,modal_title=modal_title,show_modal=True)
+    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
+                           modal_events=modal_events,
+                           modal_title=modal_title,
+                           show_modal=True)
 
     
 
 
 
-@app.route('/information')
+@app.route('/information/')
 def info():
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -142,7 +147,7 @@ def info():
 
 
 
-@app.route('/transactions', methods=['POST','GET'])
+@app.route('/transactions/', methods=['POST','GET'])
 def transactions():
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -165,7 +170,7 @@ def transactions():
 
 
 
-@app.route('/signup',methods=["POST","GET"])
+@app.route('/signup/',methods=["POST","GET"])
 def signup():
     if request.method == "POST":
         signUpError = False
@@ -206,7 +211,7 @@ def signup():
 
 
 
-@app.route('/delete/<int:id>')
+@app.route('/delete/<int:id>/')
 def delete(id):
     username_to_delete = Users.query.get_or_404(id)
 
@@ -219,7 +224,7 @@ def delete(id):
 
 
 
-@app.route('/oldCal', methods=['POST','GET'])
+@app.route('/oldCal/', methods=['POST','GET'])
 def oldCal():
     if "user" not in session:
         flash("Please login or sign up","info")
