@@ -86,9 +86,9 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route('/calendar/', defaults={'cur_year': None, 'cur_month': None})
-@app.route('/calendar/<cur_year>/<cur_month>')
-def calendar(cur_year,cur_month):
+
+@app.route('/calendar/')
+def calendar():
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
@@ -130,10 +130,54 @@ def addEvent(cell_id):
     return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
                            modal_events=modal_events,
                            modal_title=modal_title,
-                           show_modal=True)
+                           show_modal=True,
+                           add_event=True)
 
     
 
+
+@app.route('/calendar/<cell_id>/<event>', methods=["POST","GET"])
+def viewEvent(cell_id,event):
+    if "user" not in session:
+        flash("Please login or sign up","info")
+        return redirect(url_for("login"))
+    
+    cell_values = cell_id.split("-")
+    year = int(cell_values[2])
+    month = int(cell_values[1])
+
+    cal = Calendar.monthcalendar(year, month)
+    month_name = Calendar.month_name[month]
+
+    years = list(range(2020, 2031))
+    months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
+
+    if request.method == "POST":
+        _events = session["events"][cell_id]
+        print(_events)
+        print(event)
+        _events.remove(event)
+        session["events"][cell_id] = _events
+        curUser = Users.query.get(session["id"])
+        curUser.events = session["events"]
+        return redirect(url_for("calendar"))
+    else:
+        print(event)
+        print(type(event))
+        event = event.replace("'","")
+        event_arr = event[1:-1].split(",")
+        print(event_arr)
+        print(type(event_arr))
+
+        event_name = event_arr[0]
+        event_details = event_arr[3]
+        event_transaction = event_arr[2]
+        return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
+                           event_details=event_details,
+                           modal_title=event_name,
+                           event_transaction=event_transaction,
+                           add_event=False,
+                           show_modal=True)
 
 
 @app.route('/information/')

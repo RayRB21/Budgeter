@@ -45,16 +45,36 @@
         <h1 class="modal-title fs-5" id="event_modal_label">{{modal_title}}</h1>
       </div>
       <div class="modal-body">
-        {% for event in modal_events %}
-        {{event[0]}}
-        {% endfor %}
+        {% if add_event %}
+          {% for event in modal_events %}
+          {{event[0]}}
+          <br>
+          {% endfor %}
+        {% else %}
+          {{ event_details }} <br>
+          {{ event_transaction }}
+        {% endif %}
       </div>
+      {% if add_event %}
       <form class="modal-footer" method="GET" action="/calendar">
         <input type="hidden" name="month" value="{{month}}">
         <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Cancel</button>
         <input type="hidden" name="month" value="{{month}}">
-        <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Save changes</button>
+        <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Save Changes</button>
       </form>
+      {% else %}
+      <div class="modal-footer">
+        <form method="POST" action="{{url_for('viewEvent', cell_id=cell_id, event=event)}}">
+          <input type="hidden" name="month" value="{{month}}">
+          <input type="hidden" name="year" value="{{year}}">
+          <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Delete</button>
+        </form>
+        <form method="GET" action="/calendar"></form>
+          <input type="hidden" name="month" value="{{month}}">
+          <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Close</button>
+        </form>
+        {% endif %}
+      </div> 
     </div>
   </div>
 </div>
@@ -96,12 +116,12 @@
                     </a>
                   </div>
                   {% for event in session["events"][cell_id] %}
-                  <button type="button" class="btn {% if event[1] == 'work' %} btn-primary 
+                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn {% if event[1] == 'work' %} btn-primary 
                   {% elif event[1] == 'leisure' %} btn-danger 
                   {% elif event[1] == 'bills' %} btn-dark 
                   {% else %} btn-warning {% endif %}">
                   {{ event[0] }} 
-                  </button>
+                  </a>
                   <br>
                   {% endfor %}
                 {% endif %}
