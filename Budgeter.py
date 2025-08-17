@@ -10,6 +10,8 @@ from flask_migrate import Migrate
 import calendar as Calendar
 from datetime import datetime
 import re
+import json
+import ast
 
 #-------------------------
 
@@ -89,6 +91,10 @@ def logout():
 
 @app.route('/calendar/')
 def calendar():
+    '''events = {"15-8-2025": [["Party", "leisure", "-50", "Jake's birthday party"], ["Monthly Salary", "work", "+2000", "Monthly paycheque from my job"]]}
+    curUser = Users.query.get(session["id"])
+    curUser.events = events
+    db.session.commit()'''
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
@@ -136,7 +142,7 @@ def addEvent(cell_id):
     
 
 
-@app.route('/calendar/<cell_id>/<event>', methods=["POST","GET"])
+@app.route('/calendar/<cell_id>/<event>', methods=["GET","POST"])
 def viewEvent(cell_id,event):
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -155,19 +161,20 @@ def viewEvent(cell_id,event):
     if request.method == "POST":
         _events = session["events"][cell_id]
         print(_events)
+        event_arr = ast.literal_eval(event)
         print(event)
-        _events.remove(event)
+        _events.remove(event_arr)
         session["events"][cell_id] = _events
         curUser = Users.query.get(session["id"])
         curUser.events = session["events"]
+        try:
+            db.session.commit()
+            flash("Event Deleted","info")
+        except:
+            flash("Issue deleting event","error")
         return redirect(url_for("calendar"))
     else:
-        print(event)
-        print(type(event))
-        event = event.replace("'","")
-        event_arr = event[1:-1].split(",")
-        print(event_arr)
-        print(type(event_arr))
+        event_arr = ast.literal_eval(event)
 
         event_name = event_arr[0]
         event_details = event_arr[3]
@@ -176,6 +183,8 @@ def viewEvent(cell_id,event):
                            event_details=event_details,
                            modal_title=event_name,
                            event_transaction=event_transaction,
+                           cell_id=cell_id,
+                           event=event,
                            add_event=False,
                            show_modal=True)
 

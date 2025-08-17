@@ -29,6 +29,7 @@
         <button type="submit" class="btn btn-info">Show Calendar</button>
       </div>
     </form>
+<!--------------------------------------------------------------------------------------------------------------------------------->
 
 
 
@@ -36,6 +37,7 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#event_modal">
   Launch demo modal
 </button>
+<!--------------------------------------------------------------------------------------------------------------------------------->
 
 <!-- Modal -->
 <div class="modal fade" id="event_modal" tabindex="-1" aria-labelledby="event_modal_label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -69,7 +71,7 @@
           <input type="hidden" name="year" value="{{year}}">
           <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Delete</button>
         </form>
-        <form method="GET" action="/calendar"></form>
+        <form method="GET" action="/calendar">
           <input type="hidden" name="month" value="{{month}}">
           <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Close</button>
         </form>
@@ -85,7 +87,7 @@
   myModal.show();
 </script>
 {% endif %}
-
+<!--------------------------------------------------------------------------------------------------------------------------------->
 
     <!-- Calendar Table -->
     <table class="table table-bordered text-center table-striped">
@@ -134,6 +136,7 @@
     </table>
   </div>
 </div>
+<!--------------------------------------------------------------------------------------------------------------------------------->
 
 {% endblock %}
 
