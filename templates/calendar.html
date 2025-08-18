@@ -44,7 +44,7 @@
         <form method="POST" action="{{ url_for('addEvent', cell_id=cell_id) }}">
           <input class="form-control" type="text" placeholder="Event Name" aria-label="Event Name" name="event-name">
           <select class="form-select" aria-label="Event Type" name="event-type">
-            <option selected>Event Type</option>
+            <option selected value="" disabled>Event Type</option>
             <option value="work">Work</option>
             <option value="leisure">Leisure</option>
             <option value="bills">Bills</option>

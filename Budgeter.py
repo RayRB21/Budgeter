@@ -95,6 +95,7 @@ def calendar():
     curUser = Users.query.get(session["id"])
     curUser.events = events
     db.session.commit()'''
+    print(session["events"])
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
@@ -109,7 +110,9 @@ def calendar():
     years = list(range(2020, 2031))
     months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
 
-    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,show_modal=False)
+    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
+                           show_modal=False,
+                           addEvent=False)
 
 
 
@@ -130,29 +133,37 @@ def addEvent(cell_id):
     months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
 
     if request.method == "POST":
+        event_name = request.form.get('event-name')
+        event_type = request.form.get('event-type')
+        event_trans = request.form.get('event-transaction')
+        event_descr = request.form.get('event-description')
+        if not all([event_name, event_type, event_trans, event_descr]):
+            flash ("All fields are required!","error")
+            return redirect(url_for('calendar', year=year,month=month,)) 
         if cell_id not in session["events"]:
             session["events"][cell_id] = []
         _events = session["events"][cell_id]
-        _events.append([request.form.get('event-name'),request.form.get('event-type'),request.form.get('event-transaction'),request.form.get('event-description')])
+        _events.append([event_name,event_type,event_trans,event_descr])
         try:
             curUser = Users.query.get(session["id"])
             session["events"][cell_id] = _events
+            session.modified = True
             curUser.events = session["events"]
             db.session.commit()
         except:
             flash("Issue deleting event","error")
-        return redirect(url_for('calendar'))
+        return redirect(url_for('calendar', year=year,month=month,))
     else:
-        if cell_id in session["events"]:
-            modal_events = session["events"][cell_id]
-        else:
-            modal_events = ""
+     #   if cell_id in session["events"]:
+      #      modal_events = session["events"][cell_id]
+      #  else:
+     #       modal_events = "" 
         return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
-                            modal_events=modal_events,
+                            #modal_events=modal_events,
                             modal_title=cell_id,
                             cell_id=cell_id,
-                            show_modal=True,
-                            add_event=True)
+                            add_event=True,
+                            show_modal=True)
 
     
 
@@ -187,14 +198,14 @@ def viewEvent(cell_id,event):
             flash("Event Deleted","info")
         except:
             flash("Issue deleting event","error")
-        return redirect(url_for("calendar"))
+        return redirect(url_for('calendar', year=year,month=month,))
     else:
         event_arr = ast.literal_eval(event)
 
         event_name = event_arr[0]
         event_details = event_arr[3]
         event_transaction = event_arr[2]
-        return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
+    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
                            event_details=event_details,
                            modal_title=event_name,
                            event_transaction=event_transaction,
