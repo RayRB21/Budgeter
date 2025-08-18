@@ -113,12 +113,12 @@ def calendar():
 
 
 
-@app.route('/calendar/add-event/<cell_id>/')
+@app.route('/calendar/add-event/<cell_id>/', methods=["GET","POST"])
 def addEvent(cell_id):
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
-    
+
     cell_values = cell_id.split("-")
     year = int(cell_values[2])
     month = int(cell_values[1])
@@ -128,16 +128,31 @@ def addEvent(cell_id):
 
     years = list(range(2020, 2031))
     months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
-    if cell_id in session["events"]:
-        modal_events = session["events"][cell_id]
+
+    if request.method == "POST":
+        if cell_id not in session["events"]:
+            session["events"][cell_id] = []
+        _events = session["events"][cell_id]
+        _events.append([request.form.get('event-name'),request.form.get('event-type'),request.form.get('event-transaction'),request.form.get('event-description')])
+        try:
+            curUser = Users.query.get(session["id"])
+            session["events"][cell_id] = _events
+            curUser.events = session["events"]
+            db.session.commit()
+        except:
+            flash("Issue deleting event","error")
+        return redirect(url_for('calendar'))
     else:
-        modal_events = ""
-    modal_title = cell_id
-    return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
-                           modal_events=modal_events,
-                           modal_title=modal_title,
-                           show_modal=True,
-                           add_event=True)
+        if cell_id in session["events"]:
+            modal_events = session["events"][cell_id]
+        else:
+            modal_events = ""
+        return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
+                            modal_events=modal_events,
+                            modal_title=cell_id,
+                            cell_id=cell_id,
+                            show_modal=True,
+                            add_event=True)
 
     
 

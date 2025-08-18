@@ -32,13 +32,6 @@
 <!--------------------------------------------------------------------------------------------------------------------------------->
 
 
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#event_modal">
-  Launch demo modal
-</button>
-<!--------------------------------------------------------------------------------------------------------------------------------->
-
 <!-- Modal -->
 <div class="modal fade" id="event_modal" tabindex="-1" aria-labelledby="event_modal_label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
@@ -48,22 +41,29 @@
       </div>
       <div class="modal-body">
         {% if add_event %}
-          {% for event in modal_events %}
-          {{event[0]}}
-          <br>
-          {% endfor %}
+        <form method="POST" action="{{ url_for('addEvent', cell_id=cell_id) }}">
+          <input class="form-control" type="text" placeholder="Event Name" aria-label="Event Name" name="event-name">
+          <select class="form-select" aria-label="Event Type" name="event-type">
+            <option selected>Event Type</option>
+            <option value="work">Work</option>
+            <option value="leisure">Leisure</option>
+            <option value="bills">Bills</option>
+          </select>
+          <input class="form-control" type="number" placeholder="Transaction" aria-label="Transaction" name="event-transaction">
+          <input class="form-control" type="text" placeholder="Description" aria-label="Description" name="event-description">
         {% else %}
           {{ event_details }} <br>
           {{ event_transaction }}
         {% endif %}
       </div>
       {% if add_event %}
-      <form class="modal-footer" method="GET" action="/calendar">
-        <input type="hidden" name="month" value="{{month}}">
-        <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Cancel</button>
-        <input type="hidden" name="month" value="{{month}}">
-        <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Save Changes</button>
-      </form>
+          <input type="hidden" name="month" value="{{month}}">
+          <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Save Changes</button>
+        </form>
+        <form class="modal-footer" method="GET" action="/calendar">
+          <input type="hidden" name="month" value="{{month}}">
+          <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Cancel</button>
+        </form>
       {% else %}
       <div class="modal-footer">
         <form method="POST" action="{{url_for('viewEvent', cell_id=cell_id, event=event)}}">
