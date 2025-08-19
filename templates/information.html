@@ -6,10 +6,61 @@
 
 {% block body %}
 <div class = "Info">
-    <h1>Hello</h1>
-    <h3>User = {{session["user"]}}</h3>
-    <h4>Income = {{session["income"]}}</h4>
-    <h4>Spending = {{session["spending"]}}</h4>
-    <h4>Goal = {{session["goal"]}}</h4>
+    <h1>Hello {{ session["user"].capitalize() }}</h1>
+    <h3>These are {{month_name}}'s analytics</h3>
 </div>
+
+<div class="d-flex justify-content-center gap-5">
+    <canvas id="myPieChart" class="w-25 h-25" style="margin-right:5%;"></canvas>
+    <canvas id="myPieChart2" class="w-25 h-25" style="margin-left:5%"></canvas>
+</div>
+
+
+
+<script>
+  const sLabel = {{ spending_labels | tojson }};
+  const sValues = {{ spending_values | tojson }};
+  
+  new Chart(document.getElementById('myPieChart'), {
+    type: 'pie',
+    data: {
+      labels: sLabel,
+      datasets: [{ data: sValues }]
+    },
+    options: {
+        plugins:{
+        title: {
+            display: true,
+            text: "Spending",
+            font: {
+                size: 20
+            }
+        }
+        }
+    }
+  });
+
+  const iLabel = {{ income_labels | tojson }};
+  const iValues = {{ income_values | tojson }};
+
+
+  new Chart(document.getElementById('myPieChart2'), {
+    type: 'pie',
+    data: {
+      labels: iLabel,
+      datasets: [{ data: iValues }]
+    },
+    options: {
+        plugins: {
+        title: {
+            display: true,
+            text: "Income",
+            font: {
+                size: 20
+            }
+        }
+        }
+    }
+  });
+</script>
 {% endblock %}

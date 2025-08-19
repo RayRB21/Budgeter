@@ -220,8 +220,30 @@ def info():
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
+    spending= {}
+    income = {}
+    print(session["events"])
+    for date in session["events"]:
+        print(date)
+        for event in session["events"][date]:
+            if int(event[2]) < 0:
+                if event[1] not in spending:
+                    spending[event[1]] = 0
+                spending[event[1]] += int(event[2])
+            elif int(event[2]) > 0:
+                if event[1] not in spending:
+                    income[event[1]] = 0
+                income[event[1]] += int(event[2])
 
-    return render_template('information.html')
+    year = request.args.get('year', default=datetime.now().year, type=int)
+    month = request.args.get('month', default=datetime.now().month, type=int)
+
+    cal = Calendar.monthcalendar(year, month)
+    month_name = Calendar.month_name[month]
+
+
+
+    return render_template('information.html', spending_labels=list(spending.keys()), spending_values=list(spending.values()), income_labels=list(income.keys()), income_values=list(income.values()), month_name=month_name, year=year)
 
 
 
@@ -301,29 +323,6 @@ def delete(id):
     except:
         return "There was a failure to delete"    
 
-
-
-@app.route('/oldCal/', methods=['POST','GET'])
-def oldCal():
-    if "user" not in session:
-        flash("Please login or sign up","info")
-        return redirect(url_for("login"))
-    if request.method == 'POST':
-        calendar_content = request.form['content']
-        test = Users(username=calendar_content)
-
-        try:
-            db.session.add(test)
-            db.session.commit()
-            return redirect('/')
-    
-        except:
-            return 'There was an issue with the test'
-        
-    else:
-        usernames = Users.query.order_by(Users.date_created).all()
-        return render_template('oldCal.html', usernames = usernames)
-    
 
 
 if __name__ == "__main__":
