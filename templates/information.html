@@ -10,14 +10,32 @@
     <h3>These are {{month_name}}'s analytics</h3>
 </div>
 
-<div class="d-flex justify-content-center gap-5">
-    <canvas id="myPieChart" class="w-25 h-25" style="margin-right:5%;"></canvas>
-    <canvas id="myPieChart2" class="w-25 h-25" style="margin-left:5%"></canvas>
+<!--Piecharts-->
+<div style="height:50%" class="d-flex justify-content-center gap-5">
+    <canvas id="myPieChart"  style="margin-right:5%"></canvas>
+    <canvas id="myPieChart2"  style="margin-left:5%"></canvas>
 </div>
+<!----------------------------------------------------------------------------------->
+
+<!--Linecharts-->
+<div style="height: 50%" class="d-flex justify-content-center">
+  <canvas id="LineChart"></canvas>
+</div>
+<!----------------------------------------------------------------------------------->
+
+
+
+<!--Barcharts-->
+<div style="height: 100% " class="d-flex justify-content-center">
+  <canvas id="BarChart" class="h-50"></canvas>
+</div>
+<!----------------------------------------------------------------------------------->
+
 
 
 
 <script>
+  //Piecharts JS--------------
   const sLabel = {{ spending_labels | tojson }};
   const sValues = {{ spending_values | tojson }};
   
@@ -31,7 +49,7 @@
         plugins:{
         title: {
             display: true,
-            text: "Spending",
+            text: "Spending (£)",
             font: {
                 size: 20
             }
@@ -39,11 +57,10 @@
         }
     }
   });
-
-  const iLabel = {{ income_labels | tojson }};
+  
+  const iLabel = {{ income_labels | tojson }}; 
   const iValues = {{ income_values | tojson }};
-
-
+  
   new Chart(document.getElementById('myPieChart2'), {
     type: 'pie',
     data: {
@@ -54,7 +71,7 @@
         plugins: {
         title: {
             display: true,
-            text: "Income",
+            text: "Income (£)",
             font: {
                 size: 20
             }
@@ -62,5 +79,85 @@
         }
     }
   });
+//------------------------------------------------------------------------------------
+
+//Linegraphs JS-------------------------------------
+  const lineLabels = {{ days | tojson }};
+  const lineValues = [3000,3000,3000,3000,3000,3000,2400,2400,2400,2400,2400,2400,2400,2400,2400,1400,1400,1400,1400,1400,2200,2200,2200,2200,2200,2200,2200,2900,2900,2900,1000]
+
+  new Chart(document.getElementById('LineChart'),{
+    type: 'line',
+    data: {
+      labels: lineLabels,
+      datasets: [{
+        label: "Balance(£)",
+        data: lineValues,
+        borderColor: "black",
+        backgroundColor: "green",
+        tension: 0.1,
+        fill:true
+      }]
+    },
+    options: {
+      scales: {
+        y:{
+          beginAtZero: true
+        }
+      },
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: 'Balance Trend Over August'
+        }
+      }
+    }
+  });
+//------------------------------------------------------------------------------------
+
+
+
+
+
+//Barcharts JS-------------------------------------
+  //const bLabel = ["Income","Spending"]
+  //const bValues = [iValues.reduce((acc, num) => acc + num, 0),Math.abs(sValues.reduce((acc, num) => acc + num, 0))]
+
+  new Chart(document.getElementById('BarChart'),{
+    type: 'bar',
+    data: {
+      labels: ["August"],
+      datasets: [
+      { 
+        label: "Income",
+        data: [iValues.reduce((acc, num) => acc + num, 0)],
+        backgroundColor: ["green"],
+        borderWidth: 1 
+      },
+      {
+        label: "Spending",
+        data: [Math.abs(sValues.reduce((acc, num) => acc + num, 0))],
+        backgroundColor: ["red"],
+        borderWidth : 1
+      }
+      ]
+    },
+    options: {
+      scales: {
+        y:{
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        legend: { position: 'top'},
+        title:{
+          display: true,
+          text: 'Income vs Expenses'
+        }
+      }
+    }
+  });
+//------------------------------------------------------------------------------------
 </script>
 {% endblock %}

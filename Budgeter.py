@@ -239,11 +239,22 @@ def info():
     month = request.args.get('month', default=datetime.now().month, type=int)
 
     cal = Calendar.monthcalendar(year, month)
+    last_day = max(cal[-1])
+    days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+    for i in range(29,last_day+1):
+        days.append(i)
+    print(days)
     month_name = Calendar.month_name[month]
 
 
-
-    return render_template('information.html', spending_labels=list(spending.keys()), spending_values=list(spending.values()), income_labels=list(income.keys()), income_values=list(income.values()), month_name=month_name, year=year)
+    return render_template('information.html',
+                            spending_labels=list(spending.keys()), 
+                            spending_values=list(spending.values()), 
+                            income_labels=list(income.keys()), 
+                            income_values=list(income.values()), 
+                            month_name=month_name, 
+                            year=year,
+                            days=days)
 
 
 
