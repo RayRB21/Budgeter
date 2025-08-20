@@ -26,18 +26,18 @@
 
 
 <!--Barcharts-->
-<div style="height: 100% " class="d-flex justify-content-center">
-  <canvas id="BarChart" class="h-50"></canvas>
+<div style="height: 50%;" class="d-flex justify-content-center">
+  <canvas id="BarChart" ></canvas>
 </div>
 <!----------------------------------------------------------------------------------->
 
 
 
-
+ 
 <script>
   //Piecharts JS--------------
-  const sLabel = {{ spending_labels | tojson }};
-  const sValues = {{ spending_values | tojson }};
+  const sLabel = {{ month_spending_labels | tojson }};
+  const sValues = {{ month_spending_values | tojson }};
   
   new Chart(document.getElementById('myPieChart'), {
     type: 'pie',
@@ -58,8 +58,8 @@
     }
   });
   
-  const iLabel = {{ income_labels | tojson }}; 
-  const iValues = {{ income_values | tojson }};
+  const iLabel = {{ month_income_labels | tojson }}; 
+  const iValues = {{ month_income_values | tojson }};
   
   new Chart(document.getElementById('myPieChart2'), {
     type: 'pie',
@@ -93,7 +93,7 @@
         label: "Balance(£)",
         data: lineValues,
         borderColor: "black",
-        backgroundColor: "green",
+        backgroundColor: "rgba(32, 110, 16, 0.8)",
         tension: 0.1,
         fill:true
       }]
@@ -121,23 +121,23 @@
 
 
 //Barcharts JS-------------------------------------
-  //const bLabel = ["Income","Spending"]
-  //const bValues = [iValues.reduce((acc, num) => acc + num, 0),Math.abs(sValues.reduce((acc, num) => acc + num, 0))]
-
+  const weekBarLabels = ["Week 1","Week 2","Week 3", "Week 4","Week 5"];
+  //const weekSpend = {{ weekSpend | tojson }};
+  //const weekIncome = {{ weekIncome | tojson }};
   new Chart(document.getElementById('BarChart'),{
     type: 'bar',
     data: {
-      labels: ["August"],
+      labels: weekBarLabels,
       datasets: [
       { 
         label: "Income",
-        data: [iValues.reduce((acc, num) => acc + num, 0)],
+        data: {{ weekIncome }},
         backgroundColor: ["green"],
         borderWidth: 1 
       },
       {
         label: "Spending",
-        data: [Math.abs(sValues.reduce((acc, num) => acc + num, 0))],
+        data: {{ weekSpend }},
         backgroundColor: ["red"],
         borderWidth : 1
       }
@@ -153,7 +153,7 @@
         legend: { position: 'top'},
         title:{
           display: true,
-          text: 'Income vs Expenses'
+          text: 'Income vs Expenses of ' + "{{month_name}}",
         }
       }
     }

@@ -220,41 +220,118 @@ def info():
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
-    spending= {}
-    income = {}
-    print(session["events"])
-    for date in session["events"]:
-        print(date)
-        for event in session["events"][date]:
-            if int(event[2]) < 0:
-                if event[1] not in spending:
-                    spending[event[1]] = 0
-                spending[event[1]] += int(event[2])
-            elif int(event[2]) > 0:
-                if event[1] not in spending:
-                    income[event[1]] = 0
-                income[event[1]] += int(event[2])
+    
 
     year = request.args.get('year', default=datetime.now().year, type=int)
     month = request.args.get('month', default=datetime.now().month, type=int)
-
     cal = Calendar.monthcalendar(year, month)
-    last_day = max(cal[-1])
-    days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
-    for i in range(29,last_day+1):
-        days.append(i)
-    print(days)
     month_name = Calendar.month_name[month]
 
 
+#Monthly Spending Pie Chart Logic-----------------------------
+    month_spending= {}
+    month_income = {}
+    #print(session["events"])
+    for date in session["events"]:
+        #print(date)
+        for event in session["events"][date]:
+            if int(event[2]) < 0:
+                if event[1] not in month_spending:
+                    month_spending[event[1]] = 0
+                month_spending[event[1]] += int(event[2])
+            elif int(event[2]) > 0:
+                if event[1] not in month_income:
+                    month_income[event[1]] = 0
+                month_income[event[1]] += int(event[2])
+#---------------------------------------------------------------
+
+#Weekly Income vs Spending Bar Chart Logic-------------------------
+    #Week no. = [income,spending]
+    weekSpend= [0,0,0,0,0]
+    weekIncome=[0,0,0,0,0]
+
+    for date in session["events"]:
+        cell_values = date.split("-")
+        cell_values = [int(x) for x in cell_values]
+        if cell_values[1]== month and cell_values[2] == year:
+
+            for event in session["events"][date]:
+                if int(event[2]) < 0:
+                    if cell_values[0] in cal[0]:
+                        weekSpend[0] -= int(event[2])
+                    elif cell_values[0] in cal[1]:
+                        weekSpend[1] -= int(event[2])
+                    elif cell_values[0] in cal[2]:
+                        weekSpend[2] -= int(event[2])
+                    elif cell_values[0] in cal[3]:
+                        weekSpend[3] -= int(event[2])
+                    elif cell_values[0] in cal[4]:
+                        weekSpend[4] -= int(event[2])
+
+
+                elif int(event[2]) > 0:
+                    if cell_values[0] in cal[0]:
+                        weekIncome[0] += int(event[2])
+                    elif cell_values[0] in cal[1]:
+                        weekIncome[1] += int(event[2])
+                    elif cell_values[0] in cal[2]:
+                        weekIncome[2] += int(event[2])
+                    elif cell_values[0] in cal[3]:
+                        weekIncome[3] += int(event[2])
+                    elif cell_values[0] in cal[4]:
+                        weekIncome[4] += int(event[2])
+#---------------------------------------------------------------
+
+#Monthly Balance Line Graph Logic------------------------------
+
+    last_day = max(cal[-1])
+    days= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+    for i in range(29,last_day+1):
+        days.append(i)
+
+    balance= [0] * len(days)
+    relCells = []
+    for date in session["events"]:
+        cell_values = date.split("-")
+        cell_values = [int(x) for x in cell_values]
+        if cell_values[1]== month and cell_values[2] == year:
+            relCells.append([cell_values,date])
+    curBalance = session["income"]  
+    relCells = sorted(relCells)
+    
+    print(relCells)
+    cnt = 1
+    for date in relCells:
+        for event in session["events"][date[1]]:
+            while cnt < date[0][0]: #================================EDIT THIS============================
+                balance[cnt-1] = curBalance
+                cnt += 1
+            curBalance += int(event[2])
+        else:
+            balance[cnt] += int(event[2])
+            #=========================================================EDIT THIS============================
+
+
+
+    '''    for event in session["events"][date]:
+                for day in days:
+                    #if day == cell_values[]:
+                        pass'''
+
+                
+
+#---------------------------------------------------------------
     return render_template('information.html',
-                            spending_labels=list(spending.keys()), 
-                            spending_values=list(spending.values()), 
-                            income_labels=list(income.keys()), 
-                            income_values=list(income.values()), 
+                            month_spending_labels=list(month_spending.keys()), 
+                            month_spending_values=list(month_spending.values()), 
+                            month_income_labels=list(month_income.keys()), 
+                            month_income_values=list(month_income.values()), 
                             month_name=month_name, 
                             year=year,
-                            days=days)
+                            days=days,
+                            weekSpend = weekSpend,
+                            weekIncome = weekIncome,
+                            )
 
 
 
