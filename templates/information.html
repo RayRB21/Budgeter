@@ -83,7 +83,7 @@
 
 //Linegraphs JS-------------------------------------
   const lineLabels = {{ days | tojson }};
-  const lineValues = [3000,3000,3000,3000,3000,3000,2400,2400,2400,2400,2400,2400,2400,2400,2400,1400,1400,1400,1400,1400,2200,2200,2200,2200,2200,2200,2200,2900,2900,2900,1000]
+  const lineValues = {{balance | tojson }};
 
   new Chart(document.getElementById('LineChart'),{
     type: 'line',

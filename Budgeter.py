@@ -303,22 +303,26 @@ def info():
     cnt = 1
     for date in relCells:
         for event in session["events"][date[1]]:
-            while cnt < date[0][0]: #================================EDIT THIS============================
+            while cnt < date[0][0]: #================================EDIT THIS=============================
                 balance[cnt-1] = curBalance
                 cnt += 1
             curBalance += int(event[2])
-        else:
-            balance[cnt] += int(event[2])
+            balance[cnt-1] = curBalance
+
+
             #=========================================================EDIT THIS============================
-
-
-
+    print(f"balance = {balance}")
+    #curUser = Users.query.get(session["id"])
+    #session["events"] = {k: v for k, v in session["events"].items() if v}
+    print(session["events"])
+    #curUser.events = session["events"]
+    db.session.commit()
     '''    for event in session["events"][date]:
                 for day in days:
                     #if day == cell_values[]:
                         pass'''
 
-                
+
 
 #---------------------------------------------------------------
     return render_template('information.html',
@@ -331,6 +335,7 @@ def info():
                             days=days,
                             weekSpend = weekSpend,
                             weekIncome = weekIncome,
+                            balance=balance,
                             )
 
 
