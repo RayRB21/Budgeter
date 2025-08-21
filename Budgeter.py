@@ -191,6 +191,7 @@ def viewEvent(cell_id,event):
         print(event)
         _events.remove(event_arr)
         session["events"][cell_id] = _events
+        session["events"] = {k: v for k, v in session["events"].items() if v}
         curUser = Users.query.get(session["id"])
         curUser.events = session["events"]
         try:
@@ -299,22 +300,19 @@ def info():
     curBalance = session["income"]  
     relCells = sorted(relCells)
     
-    print(relCells)
     cnt = 1
     for date in relCells:
         for event in session["events"][date[1]]:
-            while cnt < date[0][0]: #================================EDIT THIS=============================
+            while cnt < date[0][0]:
                 balance[cnt-1] = curBalance
                 cnt += 1
             curBalance += int(event[2])
             balance[cnt-1] = curBalance
-
-
-            #=========================================================EDIT THIS============================
-    print(f"balance = {balance}")
+    while cnt <= days[-1]:
+        balance[cnt-1] = curBalance
+        cnt += 1
     #curUser = Users.query.get(session["id"])
     #session["events"] = {k: v for k, v in session["events"].items() if v}
-    print(session["events"])
     #curUser.events = session["events"]
     db.session.commit()
     '''    for event in session["events"][date]:
