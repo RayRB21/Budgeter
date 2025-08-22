@@ -227,27 +227,27 @@ def info():
     month = request.args.get('month', default=datetime.now().month, type=int)
     cal = Calendar.monthcalendar(year, month)
     month_name = Calendar.month_name[month]
-
+    years = list(range(2020, 2031))
+    months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
 
 #Monthly Spending Pie Chart Logic-----------------------------
     month_spending= {}
     month_income = {}
-    #print(session["events"])
+
     for date in session["events"]:
-        #print(date)
-        for event in session["events"][date]:
-            if int(event[2]) < 0:
-                if event[1] not in month_spending:
-                    month_spending[event[1]] = 0
-                month_spending[event[1]] += int(event[2])
-            elif int(event[2]) > 0:
-                if event[1] not in month_income:
-                    month_income[event[1]] = 0
-                month_income[event[1]] += int(event[2])
+        if "-" + str(month) + "-" in date:
+            for event in session["events"][date]:
+                if int(event[2]) < 0:
+                    if event[1] not in month_spending:
+                        month_spending[event[1]] = 0
+                    month_spending[event[1]] += int(event[2])
+                elif int(event[2]) > 0:
+                    if event[1] not in month_income:
+                        month_income[event[1]] = 0
+                    month_income[event[1]] += int(event[2])
 #---------------------------------------------------------------
 
 #Weekly Income vs Spending Bar Chart Logic-------------------------
-    #Week no. = [income,spending]
     weekSpend= [0,0,0,0,0]
     weekIncome=[0,0,0,0,0]
 
@@ -311,15 +311,6 @@ def info():
     while cnt <= days[-1]:
         balance[cnt-1] = curBalance
         cnt += 1
-    #curUser = Users.query.get(session["id"])
-    #session["events"] = {k: v for k, v in session["events"].items() if v}
-    #curUser.events = session["events"]
-    db.session.commit()
-    '''    for event in session["events"][date]:
-                for day in days:
-                    #if day == cell_values[]:
-                        pass'''
-
 
 
 #---------------------------------------------------------------
@@ -331,6 +322,9 @@ def info():
                             month_name=month_name, 
                             year=year,
                             days=days,
+                            years=years,
+                            months=months,
+                            month=month,
                             weekSpend = weekSpend,
                             weekIncome = weekIncome,
                             balance=balance,

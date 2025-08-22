@@ -9,6 +9,25 @@
     <h1>Hello {{ session["user"].capitalize() }}</h1>
     <h3>These are {{month_name}}'s analytics</h3>
 </div>
+    <form method="GET" class="row g-3 justify-content-center mb-4" style=" margin-left: 900px">
+      <div class="col-auto">
+        <select name="month" class="form-select" >
+          {% for m_value, m_name in months %}
+            <option value="{{ m_value }}" {% if m_value == month %}selected{% endif %}>{{ m_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <select name="year" class="form-select">
+          {% for y in years %}
+            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-info">Show Calendar</button>
+      </div>
+    </form>
 
 <!--Piecharts-->
 <div style="height:50%" class="d-flex justify-content-center gap-5">
@@ -101,7 +120,7 @@
     options: {
       scales: {
         y:{
-          beginAtZero: true
+          beginAtZero: false //CAN SET TO TRUE
         }
       },
       responsive: true,
@@ -158,6 +177,7 @@
       }
     }
   });
+
 //------------------------------------------------------------------------------------
 </script>
 {% endblock %}
