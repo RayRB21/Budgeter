@@ -7,7 +7,7 @@
 {% block body %}
 <div class = "Info">
     <h1>Hello {{ session["user"].capitalize() }}</h1>
-    <h3>These are {{month_name}}'s analytics</h3>
+    <h3>{{month_name}}'s Analytics</h3>
 </div>
     <form method="GET" class="row g-3 justify-content-center mb-4" style=" margin-left: 900px">
       <div class="col-auto">
@@ -29,40 +29,62 @@
       </div>
     </form>
 
-<!--Piecharts-->
+<!--Monthly Piecharts-->
 <div style="height:50%" class="d-flex justify-content-center gap-5">
-    <canvas id="myPieChart"  style="margin-right:5%"></canvas>
-    <canvas id="myPieChart2"  style="margin-left:5%"></canvas>
+    <canvas id="MonthlySpendPie"  style="margin-right:5%"></canvas>
+    <canvas id="MonthlyIncomePie"  style="margin-left:5%"></canvas>
 </div>
 <!----------------------------------------------------------------------------------->
 
-<!--Linecharts-->
+<!--Weekly Linechart-->
 <div style="height: 50%" class="d-flex justify-content-center">
-  <canvas id="LineChart"></canvas>
+  <canvas id="WeeklyLineChart"></canvas>
 </div>
 <!----------------------------------------------------------------------------------->
 
 
 
-<!--Barcharts-->
+<!--Weekly Barchart-->
 <div style="height: 50%;" class="d-flex justify-content-center">
-  <canvas id="BarChart" ></canvas>
+  <canvas id="WeeklyBarChart" ></canvas>
 </div>
 <!----------------------------------------------------------------------------------->
 
+<br>
+<br>
+<h3>{{year}}'s Analytics</h3>
+<br>
 
+<!--Yearly Piecharts-->
+<div style="height:50%" class="d-flex justify-content-center gap-5">
+    <canvas id="YearlySpendPie"  style="margin-right:5%"></canvas>
+    <canvas id="YearlyIncomePie"  style="margin-left:5%"></canvas>
+</div>
+<!----------------------------------------------------------------------------------->
 
+<!--Monthly Barchart-->
+<div style="height: 50%;" class="d-flex justify-content-center">
+  <canvas id="MonthlyBarChart" ></canvas>
+</div>
+<!----------------------------------------------------------------------------------->
+
+<!--Yearly Linechart-->
+<div style="height: 50%" class="d-flex justify-content-center">
+  <canvas id="YearlyLineChart"></canvas>
+</div>
+<!----------------------------------------------------------------------------------->
  
 <script>
   //Piecharts JS--------------
-  const sLabel = {{ month_spending_labels | tojson }};
-  const sValues = {{ month_spending_values | tojson }};
+  //MONTH------------
+  const msLabel = {{ month_spending_labels | tojson }};
+  const msValues = {{ month_spending_values | tojson }};
   
-  new Chart(document.getElementById('myPieChart'), {
+  new Chart(document.getElementById('MonthlySpendPie'), {
     type: 'pie',
     data: {
-      labels: sLabel,
-      datasets: [{ data: sValues }]
+      labels: msLabel,
+      datasets: [{ data: msValues }]
     },
     options: {
         plugins:{
@@ -77,14 +99,59 @@
     }
   });
   
-  const iLabel = {{ month_income_labels | tojson }}; 
-  const iValues = {{ month_income_values | tojson }};
+  const miLabel = {{ month_income_labels | tojson }}; 
+  const miValues = {{ month_income_values | tojson }};
   
-  new Chart(document.getElementById('myPieChart2'), {
+  new Chart(document.getElementById('MonthlyIncomePie'), {
     type: 'pie',
     data: {
-      labels: iLabel,
-      datasets: [{ data: iValues }]
+      labels: miLabel,
+      datasets: [{ data: miValues }]
+    },
+    options: {
+        plugins: {
+        title: {
+            display: true,
+            text: "Income (£)",
+            font: {
+                size: 20
+            }
+        }
+        }
+    }
+  });
+
+  //YEAR------------------
+  const ysLabel = {{ year_spending_labels | tojson }};
+  const ysValues = {{ year_spending_values | tojson }};
+  
+  new Chart(document.getElementById('YearlySpendPie'), {
+    type: 'pie',
+    data: {
+      labels: ysLabel,
+      datasets: [{ data: ysValues }]
+    },
+    options: {
+        plugins:{
+        title: {
+            display: true,
+            text: "Spending (£)",
+            font: {
+                size: 20
+            }
+        }
+        }
+    }
+  });
+  
+  const yiLabel = {{ year_income_labels | tojson }}; 
+  const yiValues = {{ year_income_values | tojson }};
+  
+  new Chart(document.getElementById('YearlyIncomePie'), {
+    type: 'pie',
+    data: {
+      labels: yiLabel,
+      datasets: [{ data: yiValues }]
     },
     options: {
         plugins: {
@@ -101,20 +168,57 @@
 //------------------------------------------------------------------------------------
 
 //Linegraphs JS-------------------------------------
-  const lineLabels = {{ days | tojson }};
-  const lineValues = {{balance | tojson }};
 
-  new Chart(document.getElementById('LineChart'),{
+  //MONTH---------------
+  const monthLineLabels = {{ days | tojson }};
+  const monthLineValues = {{balance | tojson }};
+
+  new Chart(document.getElementById('WeeklyLineChart'),{
     type: 'line',
     data: {
-      labels: lineLabels,
+      labels: monthLineLabels,
       datasets: [{
         label: "Balance(£)",
-        data: lineValues,
+        data: monthLineValues,
         borderColor: "black",
         backgroundColor: "rgba(32, 110, 16, 0.8)",
-        tension: 0.1,
-        fill:true
+        tension: 0,
+        fill:false //CAN SET TO TRUE
+      }]
+    },
+    options: {
+      scales: {
+        y:{
+          beginAtZero: false //CAN SET TO TRUE
+        }
+      },
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: 'Balance Trend Over {{month_name}}'
+        }
+      }
+    }
+  });
+
+
+  //YEAR-------------------------
+  const monthLabels = ["January","Febuary","March","April","May","June","July","August","September","October","November","December"];
+  const yearLineValues = {{monthBalance | tojson }};
+
+  new Chart(document.getElementById('YearlyLineChart'),{
+    type: 'line',
+    data: {
+      labels: monthLabels,
+      datasets: [{
+        label: "Balance(£)",
+        data: yearLineValues,
+        borderColor: "black",
+        backgroundColor: "rgba(32, 110, 16, 0.8)",
+        tension: 0,
+        fill:false //CAN SET TO TRUE
       }]
     },
     options: {
@@ -140,10 +244,9 @@
 
 
 //Barcharts JS-------------------------------------
+  //MONTH--------------
   const weekBarLabels = ["Week 1","Week 2","Week 3", "Week 4","Week 5"];
-  //const weekSpend = {{ weekSpend | tojson }};
-  //const weekIncome = {{ weekIncome | tojson }};
-  new Chart(document.getElementById('BarChart'),{
+  new Chart(document.getElementById('WeeklyBarChart'),{
     type: 'bar',
     data: {
       labels: weekBarLabels,
@@ -173,6 +276,44 @@
         title:{
           display: true,
           text: 'Income vs Expenses of ' + "{{month_name}}",
+        }
+      }
+    }
+  });
+
+
+  //YEAR--------------
+  //reuse monthLabels;
+  new Chart(document.getElementById('MonthlyBarChart'),{
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [
+      { 
+        label: "Income",
+        data: {{ monthIncome }},
+        backgroundColor: ["green"],
+        borderWidth: 1 
+      },
+      {
+        label: "Spending",
+        data: {{ monthSpend }},
+        backgroundColor: ["red"],
+        borderWidth : 1
+      }
+      ]
+    },
+    options: {
+      scales: {
+        y:{
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        legend: { position: 'top'},
+        title:{
+          display: true,
+          text: 'Income vs Expenses of ' + "{{year}}",
         }
       }
     }

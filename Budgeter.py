@@ -151,7 +151,7 @@ def addEvent(cell_id):
             curUser.events = session["events"]
             db.session.commit()
         except:
-            flash("Issue deleting event","error")
+            flash("Issue adding event","error")
         return redirect(url_for('calendar', year=year,month=month,))
     else:
      #   if cell_id in session["events"]:
@@ -230,24 +230,36 @@ def info():
     years = list(range(2020, 2031))
     months = [(i, Calendar.month_name[i]) for i in range(1, 13)]
 
-#Monthly Spending Pie Chart Logic-----------------------------
-    month_spending= {}
-    month_income = {}
+#Pie Chart Logic-----------------------------
+    def PieChartSpend(m_or_y,param):
+        spending = {}
+        income = {}
+        for date in session["events"]:
+            if m_or_y == "m":
+                check = "-" + str(param[0]) + "-" + str(param[1]) in date
+            elif m_or_y == "y":
+                check = "-" + str(param) in date
+            else:
+                flash("There was an error loading Graphs")
+                break
+            if check:
+                for event in session["events"][date]:
+                    if int(event[2]) < 0:
+                        if event[1] not in spending:
+                            spending[event[1]] = 0
+                        spending[event[1]] += int(event[2])
+                    elif int(event[2]) > 0:
+                        if event[1] not in income:
+                            income[event[1]] = 0
+                        income[event[1]] += int(event[2])
+        return spending, income
+    
+    month_spending, month_income = PieChartSpend("m",[month,year])
+    year_spending, year_income = PieChartSpend("y",year)
 
-    for date in session["events"]:
-        if "-" + str(month) + "-" in date:
-            for event in session["events"][date]:
-                if int(event[2]) < 0:
-                    if event[1] not in month_spending:
-                        month_spending[event[1]] = 0
-                    month_spending[event[1]] += int(event[2])
-                elif int(event[2]) > 0:
-                    if event[1] not in month_income:
-                        month_income[event[1]] = 0
-                    month_income[event[1]] += int(event[2])
 #---------------------------------------------------------------
 
-#Weekly Income vs Spending Bar Chart Logic-------------------------
+#Income vs Spending Bar Chart Logic-------------------------
     weekSpend= [0,0,0,0,0]
     weekIncome=[0,0,0,0,0]
 
@@ -281,9 +293,19 @@ def info():
                         weekIncome[3] += int(event[2])
                     elif cell_values[0] in cal[4]:
                         weekIncome[4] += int(event[2])
+
+    monthSpend = []
+    monthIncome = []
+    for i in range(1,13):
+        spend,income = PieChartSpend("m",[i,year])
+        monthSpend.append(abs(sum(spend.values())))
+        monthIncome.append(sum(income.values()))
+    
+    print(f"monthSpend === {monthSpend}")
+    print(f"monthIncome === {monthIncome}")
 #---------------------------------------------------------------
 
-#Monthly Balance Line Graph Logic------------------------------
+#Balance Line Graph Logic------------------------------
 
     last_day = max(cal[-1])
     days= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
@@ -312,22 +334,39 @@ def info():
         balance[cnt-1] = curBalance
         cnt += 1
 
+    monthBalance = []
+    for i,j in zip(monthIncome,monthSpend):
+        curBalance += i-j
+        monthBalance.append(curBalance)
+    print(f"monthBalance ==== {monthBalance}")
+
 
 #---------------------------------------------------------------
     return render_template('information.html',
                             month_spending_labels=list(month_spending.keys()), 
                             month_spending_values=list(month_spending.values()), 
                             month_income_labels=list(month_income.keys()), 
-                            month_income_values=list(month_income.values()), 
-                            month_name=month_name, 
+                            month_income_values=list(month_income.values()),
+                            year_spending_labels=list(year_spending.keys()), 
+                            year_spending_values=list(year_spending.values()), 
+                            year_income_labels=list(year_income.keys()), 
+                            year_income_values=list(year_income.values()),#
+
+                            weekSpend = weekSpend,
+                            weekIncome = weekIncome,
+                            monthSpend = monthSpend,
+                            monthIncome = monthIncome,
+
+                            balance=balance,
+                            monthBalance = monthBalance,
+
+                            month_name=month_name,
                             year=year,
                             days=days,
                             years=years,
                             months=months,
                             month=month,
-                            weekSpend = weekSpend,
-                            weekIncome = weekIncome,
-                            balance=balance,
+
                             )
 
 
