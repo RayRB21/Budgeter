@@ -5,9 +5,85 @@
 {% endblock %}
 
 {% block body %}
-<p>Current income is £{{session["income"]}}</p>
+<!--<h3>Current balance is £{{session["income"]}}</h3>
 <form action='/transactions' method='POST'>
     <input type="text" name="income" id="income">
     <input type="submit" value="Add Income">
 </form>
+-->
+
+<br>
+<br>
+<br>
+<!--Past Transactions Table-->
+<div class="overflow-auto" style="max-height:800px">
+    <div style="width:50%; float:left">
+    <table class="table" style="width: 90%; float:right">
+    <thead>
+        <tr>
+            <th colspan="3" scope="col" class="table-light">Past Transactions</th>
+        </tr>
+        <tr class="table-light">
+            <th>Date</th>
+            <th>Event</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for date in past_events %}
+        {% for event in session["events"][date[1]] %}
+        {% if event[2]|int < 0 and event[2]|int > -201 %}
+            {% set val = "table-warning" %}
+        {% elif  event[2]|int < 0 %}
+            {% set val = "table-danger" %}
+        {% else %}
+            {% set val = "table-info" %}
+        {% endif %}
+        <tr>
+            <td class = {{val}}> {{date[1]}} </td>
+            <td class = {{val}}> {{event[0].capitalize()}} </td>
+            <td class = {{val}}> £{{event[2]}} </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>
+
+<div style="width:50%; float:right;">
+  <table class="table" style="width:90%; float:left">
+  <thead>
+    <tr>
+      <th colspan="3" scope="col" class="table-light">Upcoming Transactions</th>
+    </tr>
+    <tr class="table-light">
+        <th>Date</th>
+        <th>Event</th>
+        <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+
+        {% for date in future_events %}
+        {% for event in session["events"][date[1]] %}
+        {% if event[2]|int < 0 and event[2]|int > -201 %}
+            {% set val = "table-warning" %}
+        {% elif  event[2]|int < 0 %}
+            {% set val = "table-danger" %}
+        {% else %}
+            {% set val = "table-info" %}
+        {% endif %}
+        <tr>
+            <td class = {{val}}> {{date[1]}} </td>
+            <td class = {{val}}> {{event[0].capitalize()}} </td>
+            <td class = {{val}}> £{{event[2]}} </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+  </tbody>
+  </table>
+</div>
+
+</div>
+
 {% endblock %}

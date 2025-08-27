@@ -90,16 +90,16 @@
 <!--------------------------------------------------------------------------------------------------------------------------------->
 
     <!-- Calendar Table -->
-    <table class="table table-bordered text-center table-striped">
+    <table class="table table-bordered text-center table-striped" style="table-layout: fixed; width:100%">
       <thead class="table-light">
         <tr>
-          <th><img src="{{ url_for('static', filename='assets/sun.png') }}" width = "40px" alt="SUN"></th>
-          <th><img src="{{ url_for('static', filename='assets/mon.png') }}" width = "40px" alt="MON"></th>
-          <th><img src="{{ url_for('static', filename='assets/tue.png') }}" width = "40px" alt="TUE"></th>
-          <th><img src="{{ url_for('static', filename='assets/wed.png') }}" width = "40px" alt="WED"></th>
-          <th><img src="{{ url_for('static', filename='assets/thu.png') }}" width = "40px" alt="THU"></th>
-          <th><img src="{{ url_for('static', filename='assets/fri.png') }}" width = "40px" alt="FRI"></th>
-          <th><img src="{{ url_for('static', filename='assets/sat.png') }}" width = "40px" alt="SAT"></th>
+          <th>SUN</th>
+          <th>MON</th>
+          <th>TUE</th>
+          <th>WED</th>
+          <th>THU</th>
+          <th>FRI</th>
+          <th>SAT</th>
         </tr>
       </thead>
       <tbody>
@@ -118,11 +118,11 @@
                     </a>
                   </div>
                   {% for event in session["events"][cell_id] %}
-                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn {% if event[1] == 'work' %} btn-primary 
+                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn mt-1 {% if event[1] == 'work' %} btn-primary 
                   {% elif event[1] == 'leisure' %} btn-danger 
                   {% elif event[1] == 'bills' %} btn-dark 
                   {% else %} btn-warning {% endif %}">
-                  {{ event[0] }} 
+                  {{ event[0].capitalize() }} 
                   </a>
                   <br>
                   {% endfor %}

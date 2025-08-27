@@ -51,7 +51,7 @@ def menu():
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
     else:
-        return render_template('menu.html')
+        return redirect(url_for("info"))
 
 
 
@@ -350,7 +350,7 @@ def info():
                             year_spending_labels=list(year_spending.keys()), 
                             year_spending_values=list(year_spending.values()), 
                             year_income_labels=list(year_income.keys()), 
-                            year_income_values=list(year_income.values()),#
+                            year_income_values=list(year_income.values()),
 
                             weekSpend = weekSpend,
                             weekIncome = weekIncome,
@@ -389,7 +389,26 @@ def transactions():
         except:
             return 'There was an issue with updating your income'
     else:
-        return render_template('transactions.html')
+        day = request.args.get('day',default=datetime.now().day, type=int)
+        year = request.args.get('year', default=datetime.now().year, type=int)
+        month = request.args.get('month', default=datetime.now().month, type=int)
+        past_events = []
+        future_events = []
+
+
+        for date in session["events"]:
+            cell_values = date.split("-")
+            cell_values = [int(x) for x in cell_values]
+            if cell_values[2] <= year and cell_values[1] <= month and cell_values[0] < day:
+                past_events.append([cell_values,date])
+            else:
+                future_events.append([cell_values,date])  
+    past_events = sorted(past_events,key=lambda x: (x[0][2], x[0][1], x[0][0]),reverse=True)
+    future_events = sorted(future_events,key=lambda x: (x[0][2], x[0][1], x[0][0]))
+
+
+
+    return render_template('transactions.html', past_events=past_events,future_events=future_events)
 
 
 
