@@ -48,7 +48,7 @@ def is_money_format(s):
 
 
 
-@app.route('/')
+@app.route('/', methods= ["GET"])
 def menu():
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -81,7 +81,7 @@ def login():
 
 
 
-@app.route('/logout/')
+@app.route('/logout/', methods= ["GET"])
 def logout():
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -92,7 +92,7 @@ def logout():
 
 
 
-@app.route('/calendar/')
+@app.route('/calendar/', methods= ["GET"])
 def calendar():
     '''events = {"15-8-2025": [["Party", "leisure", "-50", "Jake's birthday party"], ["Monthly Salary", "work", "+2000", "Monthly paycheque from my job"]]}
     curUser = Users.query.get(session["id"])
@@ -219,7 +219,7 @@ def viewEvent(cell_id,event):
                            show_modal=True)
 
 
-@app.route('/information/')
+@app.route('/information/', methods= ["GET"])
 def info():
     if "user" not in session:
         flash("Please login or sign up","info")
@@ -458,7 +458,7 @@ def signup():
 
 
 
-@app.route('/delete/<int:id>/')
+@app.route('/delete/<int:id>/', methods= ["GET"])
 def delete(id):
     username_to_delete = Users.query.get_or_404(id)
 
