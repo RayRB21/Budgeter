@@ -12,12 +12,14 @@ from datetime import datetime
 import re
 import json
 import ast
+import os
 
 #-------------------------
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///budget.db"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://ucrv8929bmjsel:pcf7dc1e3ecbeb5299ba7d9428b1ce65ad704bb2451191fd5b1028c18118926e1@cd7f19r8oktbkp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1qnb8nfjahc86"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://ucrv8929bmjsel:pcf7dc1e3ecbeb5299ba7d9428b1ce65ad704bb2451191fd5b1028c18118926e1@cd7f19r8oktbkp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1qnb8nfjahc86"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 app.secret_key = "test"
