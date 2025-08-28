@@ -19,6 +19,7 @@ import os
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///budget.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://ucrv8929bmjsel:pcf7dc1e3ecbeb5299ba7d9428b1ce65ad704bb2451191fd5b1028c18118926e1@cd7f19r8oktbkp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1qnb8nfjahc86"
+#-------------^^HAD TO MAKE THE PREFIX "postgresql" INSTEAD OF "postgres" TO FIX ISSUE^^------------------
 #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -32,7 +33,7 @@ class Users(db.Model):
     goal = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     password = db.Column(db.String(20), nullable=False)
-    events = db.Column(JSON)
+    events = db.Column(JSON, default=dict)
 
     def __repr__(self):
         return f'<Task {self.id}>'
@@ -265,7 +266,6 @@ def info():
 #Income vs Spending Bar Chart Logic-------------------------
     weekSpend= [0,0,0,0,0]
     weekIncome=[0,0,0,0,0]
-
     for date in session["events"]:
         cell_values = date.split("-")
         cell_values = [int(x) for x in cell_values]
@@ -304,8 +304,8 @@ def info():
         monthSpend.append(abs(sum(spend.values())))
         monthIncome.append(sum(income.values()))
     
-    print(f"monthSpend === {monthSpend}")
-    print(f"monthIncome === {monthIncome}")
+    #print(f"monthSpend === {monthSpend}")
+    #print(f"monthIncome === {monthIncome}")
 #---------------------------------------------------------------
 
 #Balance Line Graph Logic------------------------------
@@ -341,7 +341,7 @@ def info():
     for i,j in zip(monthIncome,monthSpend):
         curBalance += i-j
         monthBalance.append(curBalance)
-    print(f"monthBalance ==== {monthBalance}")
+    #print(f"monthBalance ==== {monthBalance}")
 
 
 #---------------------------------------------------------------
@@ -398,16 +398,17 @@ def transactions():
         past_events = []
         future_events = []
 
-
         for date in session["events"]:
             cell_values = date.split("-")
             cell_values = [int(x) for x in cell_values]
             if cell_values[2] <= year and cell_values[1] <= month and cell_values[0] < day:
                 past_events.append([cell_values,date])
             else:
-                future_events.append([cell_values,date])  
-    past_events = sorted(past_events,key=lambda x: (x[0][2], x[0][1], x[0][0]),reverse=True)
-    future_events = sorted(future_events,key=lambda x: (x[0][2], x[0][1], x[0][0]))
+                future_events.append([cell_values,date])
+    if past_events:
+        past_events = sorted(past_events,key=lambda x: (x[0][2], x[0][1], x[0][0]),reverse=True)
+    if future_events:
+        future_events = sorted(future_events,key=lambda x: (x[0][2], x[0][1], x[0][0]))
 
 
 

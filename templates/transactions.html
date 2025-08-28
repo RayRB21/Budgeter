@@ -30,6 +30,7 @@
         </tr>
     </thead>
     <tbody>
+        {% if past_events %}
         {% for date in past_events %}
         {% for event in session["events"][date[1]] %}
         {% if event[2]|int < 0 and event[2]|int > -201 %}
@@ -46,6 +47,7 @@
         </tr>
         {% endfor %}
         {% endfor %}
+        {% endif %}
     </tbody>
     </table>
     </div>
@@ -63,7 +65,7 @@
     </tr>
   </thead>
   <tbody>
-
+        {% if future_events %}
         {% for date in future_events %}
         {% for event in session["events"][date[1]] %}
         {% if event[2]|int < 0 and event[2]|int > -201 %}
@@ -80,6 +82,7 @@
         </tr>
         {% endfor %}
         {% endfor %}
+        {% endif %}
   </tbody>
   </table>
 </div>
