@@ -400,7 +400,7 @@ def transactions():
         for date in session["events"]:
             cell_values = date.split("-")
             cell_values = [int(x) for x in cell_values]
-            if cell_values[2] <= year and cell_values[1] <= month and cell_values[0] < day:
+            if cell_values[2] <= year and cell_values[1] < month or cell_values[2] == year and cell_values[1] == month and cell_values[0] < day:
                 past_events.append([cell_values,date])
             else:
                 future_events.append([cell_values,date])
