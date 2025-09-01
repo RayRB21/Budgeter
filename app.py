@@ -99,7 +99,6 @@ def calendar():
     curUser = Users.query.get(session["id"])
     curUser.events = events
     db.session.commit()'''
-    print(session["events"])
     if "user" not in session:
         flash("Please login or sign up","info")
         return redirect(url_for("login"))
