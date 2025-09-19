@@ -32,11 +32,14 @@ def client():
     with app.test_client() as client:
         with app.app_context():
             db.create_all()
-        yield client
-
-        with app.app_context():
-            db.drop_all()
-        os.unlink(db_path)
+        try:
+            yield client
+        finally:
+            with app.app_context():
+                db.session.remove()
+                db.drop_all()
+            if os.path.exists(db_path):
+                os.unlink(db_path)
 
 
 
@@ -49,12 +52,12 @@ def test_signup_creates_user(client):
     }, follow_redirects=True)
 
     assert b"Account successfully created!" in response.data
-    with app.app_context():
+    with client.application.app_context():
         user = Users.query.filter_by(username="newuser").first()
         assert user is not None
 
 def test_login_wrong_password(client):
-    with app.app_context():
+    with client.application.app_context():
         user = Users(username="tester", password="secret")
         db.session.add(user)
         db.session.commit()
@@ -67,13 +70,13 @@ def test_login_wrong_password(client):
     assert b"Login failed" in response.data
 
 def test_login_and_session(client):
-    with app.app_context():
-        user = Users(username="tester", password="secret")
+    with client.application.app_context():
+        user = Users(username="tester2", password="secret")
         db.session.add(user)
         db.session.commit()
 
     response = client.post("/login/", data={
-        "username": "tester",
+        "username": "tester2",
         "password": "secret"
     }, follow_redirects=True)
 
@@ -98,6 +101,6 @@ def test_add_event(client):
     }, follow_redirects=True)
 
     assert b"calendar" in response.data
-    with app.app_context():
+    with client.application.app_context():
         user = Users.query.filter_by(username="eventuser").first()
         assert "15-8-2025" in user.events
