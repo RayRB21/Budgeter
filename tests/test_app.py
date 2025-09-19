@@ -5,6 +5,8 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app import app, db, Users, is_money_format
 
+DB_PATH = "test.db"
+
 @pytest.mark.parametrize("value, expected", [
     ("100", True),
     ("-50", True),
@@ -19,15 +21,19 @@ def test_is_money_format(value, expected):
 
 @pytest.fixture
 def client():
+    if os.path.exists(DB_PATH):
+        os.remove(DB_PATH)
+    
     app.config["TESTING"] = True
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///{DB_PATH}"
     with app.test_client() as client:
         with app.app_context():
             db.create_all()
         yield client
         with app.app_context():
             db.drop_all()
-
+        if os.path.exists(DB_PATH):
+            os.remove(DB_PATH)
 
 
 
