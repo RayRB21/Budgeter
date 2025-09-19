@@ -1,6 +1,9 @@
 import pytest
 import sys
 import os
+import tempfile
+
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app import app, db, Users, is_money_format
@@ -19,19 +22,21 @@ def test_is_money_format(value, expected):
 
 @pytest.fixture
 def client():
-    if os.path.exists("test.db"):
-        os.remove("test.db")
+    db_fd, db_path = tempfile.mkstemp(suffix=".db")
+    os.close(db_fd)
     
     app.config["TESTING"] = True
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///{db_path}"
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"connect_args": {"check_same_thread": False}}
+
     with app.test_client() as client:
         with app.app_context():
             db.create_all()
         yield client
+
         with app.app_context():
             db.drop_all()
-        if os.path.exists("test.db"):
-            os.remove("test.db")
+        os.unlink(db_path)
 
 
 
