@@ -1,5 +1,9 @@
 import pytest
-from app import is_money_format,app,db,Users
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from app import app, db, Users, is_money_format
 
 @pytest.mark.parametrize("value, expected", [
     ("100", True),
