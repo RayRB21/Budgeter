@@ -16,23 +16,22 @@ from app import app, db, Users, is_money_format
 def test_is_money_format(value, expected):
     assert is_money_format(value) == expected
 
-DB_PATH = "test.db"
 
 @pytest.fixture
 def client():
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
+    if os.path.exists("test.db"):
+        os.remove("test.db")
     
     app.config["TESTING"] = True
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///{DB_PATH}"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
     with app.test_client() as client:
         with app.app_context():
             db.create_all()
         yield client
         with app.app_context():
             db.drop_all()
-        if os.path.exists(DB_PATH):
-            os.remove(DB_PATH)
+        if os.path.exists("test.db"):
+            os.remove("test.db")
 
 
 
