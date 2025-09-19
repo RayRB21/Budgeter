@@ -5,7 +5,6 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app import app, db, Users, is_money_format
 
-DB_PATH = "test.db"
 
 @pytest.mark.parametrize("value, expected", [
     ("100", True),
@@ -17,7 +16,7 @@ DB_PATH = "test.db"
 def test_is_money_format(value, expected):
     assert is_money_format(value) == expected
 
-
+DB_PATH = "test.db"
 
 @pytest.fixture
 def client():
