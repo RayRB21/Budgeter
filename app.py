@@ -18,9 +18,9 @@ import os
 
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///budget.db"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://ucrv8929bmjsel:pcf7dc1e3ecbeb5299ba7d9428b1ce65ad704bb2451191fd5b1028c18118926e1@cd7f19r8oktbkp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1qnb8nfjahc86"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://ucrv8929bmjsel:pcf7dc1e3ecbeb5299ba7d9428b1ce65ad704bb2451191fd5b1028c18118926e1@cd7f19r8oktbkp.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d1qnb8nfjahc86"
 #-------------^^HAD TO MAKE THE PREFIX "postgresql" INSTEAD OF "postgres" TO FIX ISSUE^^------------------
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 app.secret_key = "test"
@@ -472,4 +472,4 @@ def delete(id):
 
 
 if __name__ == "__main__":
-    app.run()  #debug=True)
+    app.run()
