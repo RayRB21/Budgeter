@@ -1,4 +1,4 @@
-# 💰 Budgeting Web App
+# Budgeting Web App
 
 A simple budgeting web application built with **Flask**, **SQLite**, and **Bootstrap**, designed to show i can **DEPLOY, MAINTAIN and CODE a FULL STACK web application with a functional database**. 
 Users can record income and expenses, set savings goals, and track spending trends through a clean dashboard.
@@ -9,7 +9,7 @@ Dummy Account: Username = test, Password = 123
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 - **Backend:** Python (Flask) , Java
 - **Frontend:** HTML, CSS (Bootstrap)
 - **Database:** SQLite (SQLAlchemy ORM)
@@ -18,7 +18,7 @@ Dummy Account: Username = test, Password = 123
 
 ---
 
-## 🚀 Features
+## Features
 - Add, edit, and delete income and expenses
 - View total balance and monthly breakdown
 - View charts and data of spending analytics
@@ -27,7 +27,7 @@ Dummy Account: Username = test, Password = 123
 
 ---
 
-## 🧪 Tests
+## Tests
 
 - Implemented testing using PyTest
 - Implemented CI/CD using GitHub Actions
@@ -40,7 +40,7 @@ Run tests locally with:
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 Login Page
 <img width="1920" height="911" alt="image" src="https://github.com/user-attachments/assets/70190f3f-d6ff-4d1f-ab1b-5fe94d2bb1b3" />
@@ -54,38 +54,7 @@ Past and Future Transactions
 
 ---
 
-## ⚙️ Installation & Setup
-
-1. Clone the repository
-   ```bash
-   git clone https://github.com/rayrb21/budgeter.git
-   cd budgeter
-   
-2. Create virtual environment
-   ```bash
-   python -m venv venv
-   source venv/bin/activate #For Linux/Mac
-   venv\Scripts\activate  #For Windows
-   ```
-
-3. Install dependencies
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Initialise database
-   ```bash
-   flask db upgrade
-   ```
-
-5. Run the app
-   ```bash
-   flask run
-   ```
-The app should now run at http://127.0.0.1:5000/
-
----
-## 🔑 Usage
+## Usage
 
 - Register for an account
 - Log in to your dashboard
@@ -95,7 +64,7 @@ The app should now run at http://127.0.0.1:5000/
 ---
 
 
-## 📌 Future Improvements
+## Future Improvements
 
 - Export data as csv
 - Make website more user friendly
