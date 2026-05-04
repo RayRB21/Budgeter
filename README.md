@@ -33,11 +33,6 @@ Dummy Account: Username = test, Password = 123
 - Implemented CI/CD using GitHub Actions
 - Tests automatically run on pull or push to GitHub
   
-Run tests locally with:
-   ```bash
-   pytest
-   ```
-
 ---
 
 ## Screenshots
