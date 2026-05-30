@@ -7,10 +7,10 @@
 {% block body %}
 <div class="p-4">
   <div class="container">
-    <h3 class="mb-0" style="margin-left: -1150px; color:rgb(238, 238, 238)">{{ month_name }}</h3>
+    <h3 class="mb-0 month-heading text-start">{{ month_name }}</h3>
 
     <!-- Month/Year Selection Form -->
-    <form method="GET" class="row g-3 justify-content-center mb-4" style=" margin-left: 900px">
+    <form method="GET" class="row g-3 justify-content-end mb-4">
       <div class="col-auto">
         <select name="month" class="form-select" >
           {% for m_value, m_name in months %}
@@ -26,7 +26,7 @@
         </select>
       </div>
       <div class="col-auto">
-        <button type="submit" class="btn btn-info">Show Calendar</button>
+        <button type="submit" class="btn general-button">Show Calendar</button>
       </div>
     </form>
 <!--------------------------------------------------------------------------------------------------------------------------------->
@@ -90,7 +90,7 @@
 <!--------------------------------------------------------------------------------------------------------------------------------->
 
     <!-- Calendar Table -->
-    <table class="table table-bordered text-center table-striped" style="table-layout: fixed; width:100%">
+    <table class="table table-bordered text-center table-striped calendar-table" style="table-layout: fixed; width:100%">
       <thead class="table-light">
         <tr>
           <th>SUN</th>
@@ -107,18 +107,20 @@
         <tr>
           {% for day in week %}
           {% set cell_id = day~"-"~month~"-"~year %}
-            <td  class="{{ 'not-avail' if day == 0 else '' }} pacifico" height="150px">
-              <div align="left">
-                {% if day != 0 %}
-                {{day}}
+            <td  class="{{ 'not-avail' if day == 0 else '' }}" height="150px">
+              {% if day != 0 %}
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  {{ day }}
+                </div>
+
+                <a class="btn general-button add-event-btn"
+                  href="{{ url_for('addEvent', cell_id=cell_id) }}">
+                  + <!--REPLACE WITH "{{cell_id}}" WHEN DEBUGGING-->
+                </a>
               </div>
-                  <div align ="right">
-                    <a type="button" class="btn btn-warning"  href="{{ url_for('addEvent', cell_id=cell_id) }}">
-                    + <!--REPLACE WITH "{{cell_id}}" WHEN DEBUGGING-->
-                    </a>
-                  </div>
                   {% for event in session["events"][cell_id] %}
-                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn mt-1 {% if event[1] == 'work' %} btn-primary 
+                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn mt-2 {% if event[1] == 'work' %} btn-primary 
                   {% elif event[1] == 'leisure' %} btn-danger 
                   {% elif event[1] == 'bills' %} btn-dark 
                   {% else %} btn-warning {% endif %}">

@@ -2,6 +2,7 @@
 
 {% block head %}
 <title>login</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -13,8 +14,7 @@
 -->
 
 
-<img src="{{ url_for('static', filename='assets/budgeter-logo.png') }}" width = "300" style= "display:block; margin: 0 auto; margin-top: 10px">
-
+<img src="{{ url_for('static', filename='assets/budgeter-logo-3.png') }}" width = "300" style= "display:block; margin: 0 auto; margin-top: 10px">
 
 <form action = '#' method = 'POST' class="login-form">
   <div class="mb-3">
@@ -23,7 +23,7 @@
   <div class="mb-3">
     <input type="password" class="form-control" style="width:500px; margin: 0 auto" id="password" name ="password" placeholder="Password">
   </div>
-  <button type="submit" class="btn btn-info">Login</button>
+  <button type="submit" class="btn general-button">Login</button>
 </form>
 
 

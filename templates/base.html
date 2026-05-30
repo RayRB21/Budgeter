@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Manrope' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -31,30 +31,30 @@
 
 
 <!-- NavBar -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary nav-background">
+<nav class="navbar navbar-expand-lg bg-body-tertiary nav-background py-1">
   <div class="container-fluid">
-    <a class="navbar-brand navi-menu-text" href="#"><img src="{{ url_for('static', filename='assets/budgeter-logo.png') }}" width = "70" alt="Budgeter Logo"></a>
+    <a class="navbar-brand navi-menu-text" href="#"><img src="{{ url_for('static', filename='assets/budgeter-logo-2.png') }}" width = "50" alt="Budgeter Logo"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link navi-menu-text" style= "color:rgb(238, 238, 238)" href="/information"><h5>Information</h5></a>
+          <a class="nav-link navi-menu-text" href="/information">Information</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link navi-menu-text" style= "color:rgb(238, 238, 238)" href="/calendar"><h5>Calendar</h5></a>
+          <a class="nav-link navi-menu-text" href="/calendar">Calendar</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link navi-menu-text" style= "color:rgb(238, 238, 238)" href="/transactions"><h5>Transactions</h5></a>
+          <a class="nav-link navi-menu-text" href="/transactions">Transactions</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link navi-menu-text" style= "color:rgb(238, 238, 238)" href="/logout"><h5>Logout</h5></a>
+          <a class="nav-link navi-menu-text" href="/logout">Logout</a>
         </li>
       </ul>
       {% if request.path == "/login/" %}
       <form class="container-fluid justify-content-start">
-        <a class="btn btn-warning create-acc-button" type="button" href="/signup">Create an Account</a>
+        <a class="btn create-acc-button" type="button" href="/signup">Create an Account</a>
       </form>
       {% endif %}
     </div>

@@ -1,0 +1,17 @@
+.general-button{
+    border-bottom: 1px solid rgb(243, 175, 48);
+    transition: 0.2s ease;
+}
+
+.general-button:hover{
+    background-color: rgb(243, 175, 48);
+}
+
+.calendar-button{
+    color:black; 
+    text-decoration: none; 
+    border-radius: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+

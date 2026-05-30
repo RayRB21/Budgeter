@@ -2,12 +2,13 @@
 
 {% block head %}
 <title>Information</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/information.css') }}">
+
 {% endblock %}
 
 {% block body %}
-<div class = "Info">
-    <h1>Hello {{ session["user"].capitalize() }}</h1>
-    <h3>{{month_name}}'s Analytics</h3>
+<div class = "Info" style ="margin-top: 2vh">
+    <h2>{{month_name}}'s Analytics</h2>
 </div>
     <form method="GET" class="row g-3 justify-content-center mb-4" style=" margin-left: 900px">
       <div class="col-auto">
@@ -25,10 +26,11 @@
         </select>
       </div>
       <div class="col-auto">
-        <button type="submit" class="btn btn-info">Show Calendar</button>
+        <button type="submit" class="btn general-button">Date Summary</button>
       </div>
     </form>
 
+{% if month_spending_values or month_income_values %}  
 <!--Monthly Piecharts-->
 <div style="height:50%" class="d-flex justify-content-center gap-5">
     <canvas id="MonthlySpendPie"  style="margin-right:5%"></canvas>
@@ -49,12 +51,18 @@
   <canvas id="WeeklyBarChart" ></canvas>
 </div>
 <!----------------------------------------------------------------------------------->
+{% else %}
+
+<h3>No Spending or Income Submitted for <span style="font-weight: 700">{{month_name}}</span>, Go to <a class ="general-button calendar-button" href="/calendar">Calendar</a> to Add Events</h3>
+
+{% endif %}
 
 <br>
 <br>
 <h2>{{year}}'s Analytics</h2>
 <br>
 
+{% if year_income_values or year_spending_values %}
 <!--Yearly Piecharts-->
 <div style="height:50%" class="d-flex justify-content-center gap-5">
     <canvas id="YearlySpendPie"  style="margin-right:5%"></canvas>
@@ -73,98 +81,142 @@
   <canvas id="YearlyLineChart"></canvas>
 </div>
 <!----------------------------------------------------------------------------------->
- 
+{% else %}
+ <h3>No Spending or Income Submitted for <span style="font-weight: 700">{{year}}</span>, Go to <a class ="general-button calendar-button" href="/calendar">Calendar</a> to Add Events</h3>
+{% endif %}
+
+
+
 <script>
   //Piecharts JS--------------
   //MONTH------------
   const msLabel = {{ month_spending_labels | tojson }};
   const msValues = {{ month_spending_values | tojson }};
-  
-  new Chart(document.getElementById('MonthlySpendPie'), {
-    type: 'pie',
-    data: {
-      labels: msLabel,
-      datasets: [{ data: msValues }]
+  if (msValues.length > 0){
+    new Chart(document.getElementById('MonthlySpendPie'), {
+      type: 'pie',
+      data: {
+        labels: msLabel,
+        datasets: [{ 
+        data: msValues,
+        backgroundColor: [
+        "#60A5FA",
+        "#34D399",
+        "#F87171",
+        "#A78BFA",
+        "#38BDF8"]
+      }]
     },
-    options: {
-        plugins:{
-        title: {
-            display: true,
-            text: "Spending (£)",
-            font: {
-                size: 20
-            }
-        }
-        }
-    }
-  });
-  
+      options: {
+          plugins:{
+          title: {
+              display: true,
+              text: "Spending (£)",
+              font: {
+                  size: 20
+              }
+          }
+          }
+      }
+    });
+  }
+
   const miLabel = {{ month_income_labels | tojson }}; 
   const miValues = {{ month_income_values | tojson }};
   
-  new Chart(document.getElementById('MonthlyIncomePie'), {
-    type: 'pie',
-    data: {
-      labels: miLabel,
-      datasets: [{ data: miValues }]
+  if (miValues.length > 0){
+    new Chart(document.getElementById('MonthlyIncomePie'), {
+      type: 'pie',
+      data: {
+        labels: miLabel,
+        datasets: [{ 
+        data: miValues,
+        backgroundColor: [
+        "#38BDF8",
+        "#A78BFA",
+        "#F87171",
+        "#34D399",
+        "#60A5FA"]
+      }]
     },
-    options: {
-        plugins: {
-        title: {
-            display: true,
-            text: "Income (£)",
-            font: {
-                size: 20
-            }
-        }
-        }
-    }
-  });
+      options: {
+          plugins: {
+          title: {
+              display: true,
+              text: "Income (£)",
+              font: {
+                  size: 20
+              }
+          }
+          }
+      }
+    });
+  }
 
   //YEAR------------------
   const ysLabel = {{ year_spending_labels | tojson }};
   const ysValues = {{ year_spending_values | tojson }};
   
-  new Chart(document.getElementById('YearlySpendPie'), {
-    type: 'pie',
-    data: {
-      labels: ysLabel,
-      datasets: [{ data: ysValues }]
+  if (ysValues.length > 0) {
+    new Chart(document.getElementById('YearlySpendPie'), {
+      type: 'pie',
+      data: {
+        labels: ysLabel,
+        datasets: [{ 
+        data: ysValues,
+        backgroundColor: [
+        "#60A5FA",
+        "#34D399",
+        "#F87171",
+        "#A78BFA",
+        "#38BDF8"]
+      }]
     },
-    options: {
-        plugins:{
-        title: {
-            display: true,
-            text: "Spending (£)",
-            font: {
-                size: 20
-            }
-        }
-        }
-    }
-  });
+      options: {
+          plugins:{
+          title: {
+              display: true,
+              text: "Spending (£)",
+              font: {
+                  size: 20
+              }
+          }
+          }
+      }
+    });
+  }
   
   const yiLabel = {{ year_income_labels | tojson }}; 
   const yiValues = {{ year_income_values | tojson }};
   
-  new Chart(document.getElementById('YearlyIncomePie'), {
-    type: 'pie',
-    data: {
-      labels: yiLabel,
-      datasets: [{ data: yiValues }]
+  if (yiValues.length > 0) {
+    new Chart(document.getElementById('YearlyIncomePie'), {
+      type: 'pie',
+      data: {
+        labels: yiLabel,
+        datasets: [{ 
+        data: yiValues,
+        backgroundColor: [
+        "#38BDF8",
+        "#A78BFA",
+        "#F87171",
+        "#34D399",
+        "#60A5FA"]
+      }]
     },
-    options: {
-        plugins: {
-        title: {
-            display: true,
-            text: "Income (£)",
-            font: {
-                size: 20
-            }
-        }
-        }
-    }
-  });
+      options: {
+          plugins: {
+          title: {
+              display: true,
+              text: "Income (£)",
+              font: {
+                  size: 20
+              }
+          }
+          }
+      }
+    });
+  }
 //------------------------------------------------------------------------------------
 
 //Linegraphs JS-------------------------------------
@@ -173,70 +225,73 @@
   const monthLineLabels = {{ days | tojson }};
   const monthLineValues = {{balance | tojson }};
 
-  new Chart(document.getElementById('WeeklyLineChart'),{
-    type: 'line',
-    data: {
-      labels: monthLineLabels,
-      datasets: [{
-        label: "Balance(£)",
-        data: monthLineValues,
-        borderColor: "black",
-        backgroundColor: "rgba(32, 110, 16, 0.8)",
-        tension: 0,
-        fill:false //CAN SET TO TRUE
-      }]
-    },
-    options: {
-      scales: {
-        y:{
-          beginAtZero: false //CAN SET TO TRUE
-        }
+  if (monthLineValues.length > 0){ 
+    new Chart(document.getElementById('WeeklyLineChart'),{
+      type: 'line',
+      data: {
+        labels: monthLineLabels,
+        datasets: [{
+          label: "Balance(£)",
+          data: monthLineValues,
+          borderColor: "#424242",
+          backgroundColor: "#37d074",
+          tension: 0,
+          fill:false //CAN SET TO TRUE
+        }]
       },
-      responsive: true,
-      plugins: {
-        legend: { position: 'top' },
-        title: {
-          display: true,
-          text: 'Balance Trend Over {{month_name}}'
+      options: {
+        scales: {
+          y:{
+            beginAtZero: false //CAN SET TO TRUE
+          }
+        },
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Balance Trend Over {{month_name}}'
+          }
         }
       }
-    }
-  });
-
+    });
+  }
 
   //YEAR-------------------------
   const monthLabels = ["January","Febuary","March","April","May","June","July","August","September","October","November","December"];
   const yearLineValues = {{monthBalance | tojson }};
 
-  new Chart(document.getElementById('YearlyLineChart'),{
-    type: 'line',
-    data: {
-      labels: monthLabels,
-      datasets: [{
-        label: "Balance(£)",
-        data: yearLineValues,
-        borderColor: "black",
-        backgroundColor: "rgba(32, 110, 16, 0.8)",
-        tension: 0,
-        fill:false //CAN SET TO TRUE
-      }]
-    },
-    options: {
-      scales: {
-        y:{
-          beginAtZero: false //CAN SET TO TRUE
-        }
+  if (yearLineValues.length > 0){ 
+    new Chart(document.getElementById('YearlyLineChart'),{
+      type: 'line',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: "Balance(£)",
+          data: yearLineValues,
+          borderColor: "#424242",
+          backgroundColor: "#37d074",
+          tension: 0,
+          fill:false //CAN SET TO TRUE
+        }]
       },
-      responsive: true,
-      plugins: {
-        legend: { position: 'top' },
-        title: {
-          display: true,
-          text: 'Balance Trend Over August'
+      options: {
+        scales: {
+          y:{
+            beginAtZero: false //CAN SET TO TRUE
+          }
+        },
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'Balance Trend Over August'
+          }
         }
       }
-    }
-  });
+    });
+  }
 //------------------------------------------------------------------------------------
 
 
@@ -244,43 +299,6 @@
 
 
 //Barcharts JS-------------------------------------
-  //MONTH--------------
-  const weekBarLabels = ["Week 1","Week 2","Week 3", "Week 4","Week 5"];
-  new Chart(document.getElementById('WeeklyBarChart'),{
-    type: 'bar',
-    data: {
-      labels: weekBarLabels,
-      datasets: [
-      { 
-        label: "Income",
-        data: {{ weekIncome }},
-        backgroundColor: ["green"],
-        borderWidth: 1 
-      },
-      {
-        label: "Spending",
-        data: {{ weekSpend }},
-        backgroundColor: ["red"],
-        borderWidth : 1
-      }
-      ]
-    },
-    options: {
-      scales: {
-        y:{
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        legend: { position: 'top'},
-        title:{
-          display: true,
-          text: 'Income vs Expenses of ' + "{{month_name}}",
-        }
-      }
-    }
-  });
-
 
   //YEAR--------------
   //reuse monthLabels;
@@ -292,13 +310,13 @@
       { 
         label: "Income",
         data: {{ monthIncome }},
-        backgroundColor: ["green"],
+        backgroundColor: ["#37d074"],
         borderWidth: 1 
       },
       {
         label: "Spending",
         data: {{ monthSpend }},
-        backgroundColor: ["red"],
+        backgroundColor: ["#e08148"],
         borderWidth : 1
       }
       ]
@@ -318,6 +336,44 @@
       }
     }
   });
+  
+  //MONTH--------------
+
+  const weekBarLabels = ["Week 1","Week 2","Week 3", "Week 4","Week 5"];
+    new Chart(document.getElementById('WeeklyBarChart'),{
+      type: 'bar',
+      data: {
+        labels: weekBarLabels,
+        datasets: [
+        { 
+          label: "Income",
+          data: {{ weekIncome }},
+          backgroundColor: ["#37d074"],
+          borderWidth: 1 
+        },
+        {
+          label: "Spending",
+          data: {{ weekSpend }},
+          backgroundColor: ["#e08148"],
+          borderWidth : 1
+        }
+        ]
+      },
+      options: {
+        scales: {
+          y:{
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: { position: 'top'},
+          title:{
+            display: true,
+            text: 'Income vs Expenses of ' + "{{month_name}}",
+          }
+        }
+      }
+    });
 
 //------------------------------------------------------------------------------------
 </script>
