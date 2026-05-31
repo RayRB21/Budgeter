@@ -68,10 +68,10 @@
     {% if messages %}
         {% for category, msg in messages %}
             {% if category == "info" %}
-            <div class="alert alert-primary" role="alert">{{msg}}</div>
+            <div class="alert custom-alert mt-2" role="alert">{{msg}}</div>
             {% endif %}
             {% if category == "error" %}
-              <div class="alert alert-warning" role="alert">{{msg}}</div>
+              <div class="alert custom-alert" role="alert">{{msg}}</div>
             {% endif %}
         {% endfor %}
     {% endif %}

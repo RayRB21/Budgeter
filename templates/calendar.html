@@ -120,10 +120,10 @@
                 </a>
               </div>
                   {% for event in session["events"][cell_id] %}
-                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn mt-2 {% if event[1] == 'work' %} btn-primary 
-                  {% elif event[1] == 'leisure' %} btn-danger 
-                  {% elif event[1] == 'bills' %} btn-dark 
-                  {% else %} btn-warning {% endif %}">
+                  <a type="button" href = "{{ url_for('viewEvent', cell_id=cell_id, event = event) }}" class="btn event-btn mt-2 {% if event[1] == 'work' %} work-btn 
+                  {% elif event[1] == 'leisure' %} leisure-btn 
+                  {% elif event[1] == 'bills' %} bills-btn 
+                  {% else %} else-btn {% endif %}">
                   {{ event[0].capitalize() }} 
                   </a>
                   <br>
