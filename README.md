@@ -38,7 +38,7 @@ Dummy Account: Username = test, Password = 123
 ## Screenshots
 
 Login Page
-<img width="1920" height="911" alt="image" src="https://github.com/user-attachments/assets/70190f3f-d6ff-4d1f-ab1b-5fe94d2bb1b3" />
+<img width="1920" height="911" alt="image" src="images/budgeter-login-page.png" />
 
 Information Charts
 <img width="1897" height="899" alt="image" src="https://github.com/user-attachments/assets/5be0a8a9-cbcc-4a6f-abcb-2e7769ff8718" />
