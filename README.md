@@ -5,8 +5,6 @@ Users can record income and expenses, set savings goals, and track spending tren
 
 https://budgeterapp-e0fa271274bb.herokuapp.com/
 
-Dummy Account: Username = test, Password = 123
-
 ---
 
 ## Tech Stack
