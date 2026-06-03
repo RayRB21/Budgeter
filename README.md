@@ -10,7 +10,7 @@ https://budgeterapp-e0fa271274bb.herokuapp.com/
 ## Tech Stack
 - **Backend:** Python (Flask) , Java
 - **Frontend:** HTML, CSS (Bootstrap)
-- **Database:** SQLite (SQLAlchemy ORM)
+- **Database:** PostgreSQL
 - **Deployment:** Heroku
 - **CI/CD:** GitHub Actions (tests + auto-deploy)
 
