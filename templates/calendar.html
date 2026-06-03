@@ -8,7 +8,6 @@
 <div class="p-4">
   <div class="container">
     <h3 class="mb-0 month-heading text-start">{{ month_name }}</h3>
-
     <!-- Month/Year Selection Form -->
     <form method="GET" class="row g-3 justify-content-end mb-4">
       <div class="col-auto">
@@ -30,13 +29,24 @@
       </div>
     </form>
 <!--------------------------------------------------------------------------------------------------------------------------------->
+    <div class="d-flex align-items-center" style="margin-bottom:15px"> 
+      <div class= "index-circle" ></div>
+      <div class= "index-text">
+      Leisure</div>
+      <div class= "index-circle" style="margin-left: 20px; background-color:rgb(0, 47, 255)" ></div>
+      <div class= "index-text">
+      Work</div>
+      <div class= "index-circle" style ="margin-left: 20px; background-color: rgb(162, 0, 255)" ></div>
+      <div class= "index-text">
+      Bills</div>
+    </div>
 
 
 <!-- Modal -->
 <div class="modal fade" id="event_modal" tabindex="-1" aria-labelledby="event_modal_label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header event-header">
         <h1 class="modal-title fs-5" id="event_modal_label">{{modal_title}}</h1>
       </div>
       <div class="modal-body">
@@ -52,8 +62,8 @@
           <input class="form-control" type="number" placeholder="Transaction" aria-label="Transaction" name="event-transaction">
           <input class="form-control" type="text" placeholder="Description" aria-label="Description" name="event-description">
         {% else %}
-          {{ event_details }} <br>
-          {{ event_transaction }}
+          <div>{{ event_details }}</div>
+          <div class="event-trans {% if event_count < 0 %} negative-trans" > - {% else %} "> + {% endif %} £{{ event_count|abs }}</div>
         {% endif %}
       </div>
       {% if add_event %}
@@ -69,11 +79,11 @@
         <form method="POST" action="{{url_for('viewEvent', cell_id=cell_id, event=event)}}">
           <input type="hidden" name="month" value="{{month}}">
           <input type="hidden" name="year" value="{{year}}">
-          <button type="submit" class="btn btn-secondary" name = "year" value="{{year}}">Delete</button>
+          <button type="submit" class="btn delete-button" name = "year" value="{{year}}">Delete</button>
         </form>
         <form method="GET" action="/calendar">
           <input type="hidden" name="month" value="{{month}}">
-          <button type="submit" class="btn btn-primary" name = "year" value="{{year}}">Close</button>
+          <button type="submit" class="btn general-button" name = "year" value="{{year}}">Close</button>
         </form>
         {% endif %}
       </div> 
@@ -124,7 +134,9 @@
                   {% elif event[1] == 'leisure' %} leisure-btn 
                   {% elif event[1] == 'bills' %} bills-btn 
                   {% else %} else-btn {% endif %}">
+                  <div class= "d-none d-md-block">
                   {{ event[0].capitalize() }} 
+                  </div>
                   </a>
                   <br>
                   {% endfor %}

@@ -105,6 +105,17 @@ table{
 }
 
 /*-------CALENDAR----------------*/
+.index-circle{
+    width: 17px;
+    height: 17px;
+    background-color: red;
+    border-radius:20%;
+
+}
+
+.index-text{
+    margin-left: 2px;
+}
 
 .calendar-button{
     color:black; 
@@ -124,7 +135,7 @@ table{
 }
 
 .calendar-table {
-    --bs-table-striped-bg: #fcdc86;
+    --bs-table-striped-bg: #ffe59f;
 }
 
 .not-avail{
@@ -132,9 +143,9 @@ table{
 }
 
 .event-btn{
-    border: 2px solid rgb(68, 68, 68);
-    color: rgb(0, 0, 0);
-    font-weight: 600;
+    width: 100%;
+    min-height:20%;
+    font-weight: 300;
     font-size: 15px;
     padding-top: 3px;
     padding-bottom: 3px;
@@ -143,35 +154,65 @@ table{
 }
 .event-btn:hover{
     scale: 1.05;
+    font-weight:400;
 }
 
 .work-btn{
-    background-color: rgba(94, 176, 253, 0.685);
+    border-left: 2px solid rgb(0, 47, 255);
+    background-color: rgba(94, 176, 253, 0.466);
+    color: rgb(0, 47, 255);
 }
 .work-btn:hover{
     background-color: rgba(94, 176, 253, 0.685);
 }
 
 .leisure-btn{
-    background-color: rgba(250, 51, 94, 0.685);
+    border-left: 2px solid rgb(255, 0, 0);
+    background-color: rgba(250, 51, 94, 0.466);
+    color: rgb(255, 0, 0);;
 }
 .leisure-btn:hover{
     background-color: rgba(250, 51, 94, 0.685);
 }
 
 .bills-btn{
-    background-color: rgba(51, 64, 250, 0.685);
+    border-left: 2px solid rgb(162, 0, 255);
+    background-color: rgba(121, 51, 250, 0.466);
+    color: rgb(162, 0, 255);
 }
 .bills-btn:hover{
     background-color: rgba(51, 64, 250, 0.685);
 }
+
+.event-header{
+    background-color: #ffe59f;
+}
+
+.modal-title{
+    font-weight: 700;
+}
+
+.delete-button{
+    border-bottom: solid 1px rgb(219, 56, 56);
+    transition: 0.2s ease;
+}
+.delete-button:hover{
+    background-color: rgb(219, 56, 56);
+}
+
+.event-trans{
+    margin-top: 20px;
+    color: green
+}
+
+.negative-trans{
+    color: red ;
+}
+
 /*------------------------------------*/
 
 
 
 /*-------SIGN UP----------------*/
-
-.sign-up-box{
-}
 
 /*------------------------------------*/

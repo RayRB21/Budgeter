@@ -121,7 +121,8 @@ def calendar():
 
     return render_template('calendar.html',calendar=cal,month=month,year=year,month_name=month_name,months=months,years=years,
                            show_modal=False,
-                           addEvent=False)
+                           addEvent=False,
+                           event_count=0)
 
 
 
@@ -208,7 +209,7 @@ def viewEvent(cell_id,event):
             flash("Event Deleted","info")
         except:
             flash("Issue deleting event","error")
-        return redirect(url_for('calendar', year=year,month=month,))
+        return redirect(url_for('calendar', year=year,month=month,event_count=0))
     else:
         event_arr = ast.literal_eval(event)
 
@@ -219,6 +220,7 @@ def viewEvent(cell_id,event):
                            event_details=event_details,
                            modal_title=event_name,
                            event_transaction=event_transaction,
+                           event_count=int(event_transaction),
                            cell_id=cell_id,
                            event=event,
                            add_event=False,
