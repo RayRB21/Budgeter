@@ -41,8 +41,12 @@ Login Page
 <img width="1920" height="911" alt="image" src="images/budgeter-login-page.png" />
 
 Information Charts
-<img width="1897" height="899" alt="image" src="https://github.com/user-attachments/assets/5be0a8a9-cbcc-4a6f-abcb-2e7769ff8718" />
-<img width="1870" height="908" alt="image" src="https://github.com/user-attachments/assets/dc3ccf59-20b2-445b-99eb-9312d2f2d96f" />
+<img width="1897" height="899" alt="image" src="images/budgeter-info-1.png" />
+<img width="1870" height="908" alt="image" src="images/budgeter-info-2.png" />
+
+Calendar
+<img width="1897" height="899" alt="image" src="images/budgeter-calendar.png" />
+<img width="1897" height="899" alt="image" src="images/budgeter-calendar-event.png" />
 
 Past and Future Transactions
 <img width="1916" height="909" alt="image" src="https://github.com/user-attachments/assets/dc9c9e92-a23b-4764-8d6c-c6c55fac9ab5" />
