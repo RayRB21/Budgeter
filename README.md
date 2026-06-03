@@ -67,7 +67,7 @@ Past and Future Transactions
 
 - Export data as csv
 - Make website more user friendly
-- Add more features
+- Implement subscription type that automatically repeats every month
 - Implement predictions on future earnings
 
 ---
